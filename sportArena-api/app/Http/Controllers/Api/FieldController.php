@@ -3,10 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\Request\StoreFieldRequest;
-use App\Http\Controllers\Resources\FieldResource;
+use App\Http\Request\StoreFieldRequest;
+use App\Http\Resources\FieldResource;
 use App\Services\FieldService;
-use Exception;
 
 class FieldController extends Controller
 {
@@ -95,7 +94,7 @@ class FieldController extends Controller
                 'message' => 'Field retrieved successfully',
                 'data' => new FieldResource($field)
             ]);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Field not found',
