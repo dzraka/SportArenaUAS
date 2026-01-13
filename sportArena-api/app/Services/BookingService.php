@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Models\Booking;
 use App\Models\Field;
 use App\Models\User;
-use Exception;
 use InvalidArgumentException;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -83,6 +82,24 @@ class BookingService
 
         return DB::transaction(function () use ($booking, $status) {
             $booking->update(['status' => $status]);
+            return $booking;
+        });
+    }
+
+    public function cancelBookingByUser(User $user, $id)
+    {
+        $booking = Booking::findOrFail($id);
+
+        if ($booking->user_id !== $user->id) {
+            throw new InvalidArgumentException('Anda tidak memiliki akses untuk membatalkan pesanan ini.');
+        }
+
+        if ($booking->status !== 'pending') {
+            throw new InvalidArgumentException('Pesanan tidak dapat dibatalkan karena sudah diproses atau selesai.');
+        }
+
+        return DB::transaction(function () use ($booking) {
+            $booking->update(['status' => 'cancelled']);
             return $booking;
         });
     }
