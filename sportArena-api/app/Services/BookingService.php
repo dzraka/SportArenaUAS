@@ -77,7 +77,7 @@ class BookingService
         $booking = Booking::findOrFail($id);
 
         if ($booking->status === 'completed' && $status === 'pending') {
-            throw new InvalidArgumentException('Booking yang sudah selesai tidak dapat dikembalikan ke pending');
+            throw new InvalidArgumentException('A completed booking cannot be reverted to pending');
         }
 
         return DB::transaction(function () use ($booking, $status) {
@@ -91,11 +91,11 @@ class BookingService
         $booking = Booking::findOrFail($id);
 
         if ($booking->user_id !== $user->id) {
-            throw new InvalidArgumentException('Anda tidak memiliki akses untuk membatalkan pesanan ini.');
+            throw new InvalidArgumentException('You do not have permission to cancel this booking.');
         }
 
         if ($booking->status !== 'pending') {
-            throw new InvalidArgumentException('Pesanan tidak dapat dibatalkan karena sudah diproses atau selesai.');
+            throw new InvalidArgumentException('The booking cannot be cancelled because it has already been processed or completed.');
         }
 
         return DB::transaction(function () use ($booking) {
