@@ -82,5 +82,6 @@ class User {
     "profile_photo_path": profilePhotoPath,
     "created_at": createdAt?.toIso8601String(),
     "updated_at": updatedAt?.toIso8601String(),
+    "token": token,
   };
 }
