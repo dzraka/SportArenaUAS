@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Request\StoreBookingRequest;
+use App\Http\Requests\StoreBookingRequest;
 use App\Http\Resources\BookingResource;
 use App\Services\BookingService;
 use Illuminate\Http\Request;

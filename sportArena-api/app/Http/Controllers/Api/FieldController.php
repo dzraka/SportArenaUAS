@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Request\StoreFieldRequest;
+use App\Http\Requests\StoreFieldRequest;
 use App\Http\Resources\FieldResource;
 use App\Services\FieldService;
 
