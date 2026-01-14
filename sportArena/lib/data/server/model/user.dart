@@ -16,12 +16,12 @@ class User {
     required this.id,
     required this.name,
     required this.email,
-    required this.emailVerifiedAt,
+    this.emailVerifiedAt,
     required this.role,
     required this.phoneNumber,
-    required this.profilePhotoPath,
-    required this.createdAt,
-    required this.updatedAt,
+    this.profilePhotoPath,
+    this.createdAt,
+    this.updatedAt,
     this.token,
   });
 
