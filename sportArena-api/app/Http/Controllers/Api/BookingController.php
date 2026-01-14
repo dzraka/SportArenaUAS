@@ -17,6 +17,11 @@ class BookingController extends Controller
         $this->bookingService = $bookingService;
     }
 
+    /**
+     * Get all bookings
+     * 
+     * (Admin) Melihat seluruh riwayat booking masuk.
+     */
     public function index()
     {
         $bookings = $this->bookingService->getAllBokings();
@@ -28,6 +33,11 @@ class BookingController extends Controller
         ]);
     }
 
+    /**
+     * Crate a new booking
+     * 
+     * (Customer) Membuat pesanan lapangan.
+     */
     public function store(StoreBookingRequest $request)
     {
         try {
@@ -50,6 +60,11 @@ class BookingController extends Controller
         }
     }
 
+    /**
+     * Update booking status
+     * 
+     * (Admin) Mengubah status pesanan.
+     */
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -73,6 +88,11 @@ class BookingController extends Controller
         }
     }
 
+    /**
+     * Cancel a booking
+     * 
+     * (Customer) Membatalkan pesanan yang masih pending.
+     */
     public function cancel(Request $request, $id)
     {
         try {
@@ -92,6 +112,11 @@ class BookingController extends Controller
         }
     }
 
+    /**
+     * Get booking details
+     * 
+     * Melihat detail pesanan tertentu.
+     */
     public function show($id)
     {
         try {
@@ -111,6 +136,11 @@ class BookingController extends Controller
         }
     }
 
+    /**
+     * Get user bookings
+     * 
+     * (Customer) Melihat riwayat booking.
+     */
     public function userBookings(Request $request)
     {
         $bookings = $this->bookingService->getUserBookings($request->user());

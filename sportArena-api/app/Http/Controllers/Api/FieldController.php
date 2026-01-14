@@ -16,6 +16,11 @@ class FieldController extends Controller
         $this->fieldService = $fieldService;
     }
 
+    /**
+     * Get all fields
+     * 
+     * Mendapatkan daftar semua lapangan.
+     */
     public function index()
     {
         $fields = $this->fieldService->getAllFields();
@@ -27,6 +32,11 @@ class FieldController extends Controller
         ]);
     }
 
+    /**
+     * Create a new field
+     * 
+     * (Admin) Menambahkan data lapangan baru.
+     */
     public function store(StoreFieldRequest $request)
     {
         try {
@@ -46,6 +56,11 @@ class FieldController extends Controller
         }
     }
 
+    /**
+     * Update a field
+     * 
+     * (Admin) Memperbarui data lapangan.
+     */
     public function update(StoreFieldRequest $request, $id)
     {
         try {
@@ -65,7 +80,12 @@ class FieldController extends Controller
         }
     }
 
-    public function destry($id)
+    /**
+     * Delete a field
+     * 
+     * (Admin) Menghapus data lapangan.
+     */
+    public function destroy($id)
     {
         try {
             $this->fieldService->deleteField($id);
@@ -84,6 +104,11 @@ class FieldController extends Controller
         }
     }
 
+    /**
+     * Get fields details
+     * 
+     * Melihat detail satu lapangan berdasarkan ID.
+     */
     public function show($id)
     {
         try {
@@ -103,6 +128,11 @@ class FieldController extends Controller
         }
     }
 
+    /**
+     * Get futsal fields
+     * 
+     * Mendapatkan khusus lapangan kategori futsal.
+     */
     public function getFutsalFields()
     {
         $fields = $this->fieldService->getFieldsByType('futsal');
@@ -114,6 +144,11 @@ class FieldController extends Controller
         ]);
     }
 
+    /**
+     * Get badminton fields
+     * 
+     * Mendapatkan khusus lapangan kategori badminton.
+     */
     public function getBadmintonFields()
     {
         $fields = $this->fieldService->getFieldsByType('badminton');
@@ -125,6 +160,11 @@ class FieldController extends Controller
         ]);
     }
 
+    /**
+     * Get basket fields
+     * 
+     * Medapatkan khusus lapangan kategori basket.
+     */
     public function getBasketFields()
     {
         $fields = $this->fieldService->getFieldsByType('basket');

@@ -17,6 +17,11 @@ class AuthController extends Controller
         $this->authService = $authService;
     }
 
+    /**
+     * Register new user
+     * 
+     * Mendaftarkan pengguna baru (Customer) ke dalam sistem.
+     */
     public function register(RegisterRequest $request)
     {
         try {
@@ -35,6 +40,11 @@ class AuthController extends Controller
         }
     }
 
+    /**
+     * Login user
+     * 
+     * Masuk ke aplikasi untuk mendapatkan Token Akses.
+     */
     public function login(LoginRequest $request)
     {
         try {
@@ -54,6 +64,11 @@ class AuthController extends Controller
         }
     }
 
+    /**
+     * Logout user
+     * 
+     * Keluar dari aplikasi dan menghapus token.
+     */
     public function logout(Request $request)
     {
         $this->authService->logout($request->user());
@@ -64,6 +79,11 @@ class AuthController extends Controller
         ]);
     }
 
+    /**
+     * Get user profile
+     * 
+     * Mendapatkan data diri user yang sedang login.
+     */
     public function userProfile(Request $request)
     {
         return response()->json([
@@ -73,6 +93,11 @@ class AuthController extends Controller
         ]);
     }
 
+    /**
+     * Update user profile
+     * 
+     * Mengupdate data diri dan foto profil
+     */
     public function updateProfile(Request $request)
     {
         $request->validate([
