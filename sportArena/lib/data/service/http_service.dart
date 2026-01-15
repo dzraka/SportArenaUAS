@@ -103,20 +103,15 @@ class HttpService {
     }
   }
 
-  Future<http.Response> put(String endPoint, Map<String, dynamic> body) async {
+  Future<http.Response> delete(
+    String endPoint, {
+    Map<String, String>? headers,
+  }) async {
     final url = Uri.parse('$baseURL$endPoint');
-    final response = await http.put(
+    final response = await http.delete(
       url,
-      headers: _getHeaders(),
-      body: jsonEncode(body),
+      headers: _getHeaders(extraHeaders: headers),
     );
-    log('PUT Response: ${response.body}');
-    return response;
-  }
-
-  Future<http.Response> delete(String endPoint) async {
-    final url = Uri.parse('$baseURL$endPoint');
-    final response = await http.delete(url, headers: _getHeaders());
     return response;
   }
 }
