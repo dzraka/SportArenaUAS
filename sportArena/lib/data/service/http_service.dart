@@ -19,29 +19,47 @@ class HttpService {
     log('Token cleared');
   }
 
-  Map<String, String> _getHeaders({bool isMultipart = false}) {
+  Map<String, String> _getHeaders({
+    bool isMultipart = false,
+    Map<String, String>? extraHeaders,
+  }) {
     final headers = {'Accept': 'application/json'};
     if (!isMultipart) {
       headers['Content-Type'] = 'application/json';
     }
+
     if (_token != null) {
       headers['Authorization'] = 'Bearer $_token';
+    }
+
+    if (extraHeaders != null) {
+      headers.addAll(extraHeaders);
     }
     return headers;
   }
 
-  Future<http.Response> get(String endpoint) async {
+  Future<http.Response> get(
+    String endpoint, {
+    Map<String, String>? headers,
+  }) async {
     final url = Uri.parse('$baseURL$endpoint');
-    final response = await http.get(url, headers: _getHeaders());
+    final response = await http.get(
+      url,
+      headers: _getHeaders(extraHeaders: headers),
+    );
     log(response.body);
     return response;
   }
 
-  Future<http.Response> post(String endPoint, Map<String, dynamic> body) async {
+  Future<http.Response> post(
+    String endPoint,
+    Map<String, dynamic> body, {
+    Map<String, String>? headers,
+  }) async {
     final url = Uri.parse('$baseURL$endPoint');
     final response = await http.post(
       url,
-      headers: _getHeaders(),
+      headers: _getHeaders(extraHeaders: headers),
       body: jsonEncode(body),
     );
     return response;
@@ -51,13 +69,16 @@ class HttpService {
     String endPoint,
     Map<String, String> fields,
     File? file,
-    String fileFieldName,
-  ) async {
+    String fileFieldName, {
+    Map<String, String>? headers,
+  }) async {
     try {
       final url = Uri.parse('$baseURL$endPoint');
       final request = http.MultipartRequest('POST', url);
 
-      request.headers.addAll(_getHeaders(isMultipart: true));
+      request.headers.addAll(
+        _getHeaders(isMultipart: true, extraHeaders: headers),
+      );
       request.fields.addAll(fields);
 
       if (file != null) {
