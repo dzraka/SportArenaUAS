@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 class User {
-  final int id;
+  final int? id;
   final String name;
   final String email;
   final DateTime? emailVerifiedAt;
@@ -13,7 +13,7 @@ class User {
   final String? token;
 
   User({
-    required this.id,
+    this.id,
     required this.name,
     required this.email,
     this.emailVerifiedAt,
@@ -55,13 +55,13 @@ class User {
 
   factory User.fromMap(Map<String, dynamic> json) => User(
     id: json["id"],
-    name: json["name"],
-    email: json["email"],
+    name: json["name"] ?? "",
+    email: json["email"] ?? "",
     emailVerifiedAt: json["email_verified_at"] != null
         ? DateTime.parse(json["email_verified_at"])
         : null,
-    role: json["role"],
-    phoneNumber: json["phone_number"],
+    role: json["role"] ?? "",
+    phoneNumber: json["phone_number"] ?? "",
     profilePhotoPath: json["profile_photo_path"],
     createdAt: json["created_at"] != null
         ? DateTime.parse(json["created_at"])

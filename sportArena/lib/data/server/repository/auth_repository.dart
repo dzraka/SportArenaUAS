@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:final_project/data/server/usecase/request/login_request.dart';
 import 'package:final_project/data/server/usecase/request/register_request.dart';
 import 'package:final_project/data/server/usecase/response/get_user_response.dart';
@@ -32,12 +34,17 @@ class AuthRepository {
   Future<RegisterResponse> register(RegisterRequest request) async {
     try {
       final response = await httpService.post('register', request.toMap());
-      final responsData = RegisterResponse.fromJson(response.body);
+
+      final responseBody = jsonDecode(response.body);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        return responsData;
+        return RegisterResponse.fromMap(responseBody);
       } else {
-        return responsData;
+        return RegisterResponse(
+          status: 'error',
+          message: responseBody['message'] ?? 'Terjadi kesalahan',
+          data: null,
+        );
       }
     } catch (e) {
       throw Exception('Register Error: $e');
