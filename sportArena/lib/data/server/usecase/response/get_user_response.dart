@@ -28,12 +28,12 @@ class GetUserResponse {
   factory GetUserResponse.fromMap(Map<String, dynamic> json) => GetUserResponse(
     status: json["status"],
     message: json["message"],
-    data: User.fromMap(json["User"]),
+    data: User.fromMap(json["data"]),
   );
 
   Map<String, dynamic> toMap() => {
     "status": status,
     "message": message,
-    "User": data.toMap(),
+    "data": data.toMap(),
   };
 }
