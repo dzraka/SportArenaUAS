@@ -3,6 +3,7 @@ import 'package:final_project/data/server/usecase/request/login_request.dart';
 import 'package:final_project/data/service/http_service.dart';
 import 'package:final_project/presentation/auth/register_page.dart';
 import 'package:final_project/presentation/home/home_page.dart';
+import 'package:final_project/presentation/sa_navigator.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -56,7 +57,7 @@ class _LoginPageState extends State<LoginPage> {
         if (mounted) {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => const HomePage()),
+            MaterialPageRoute(builder: (context) => const SaNavigator()),
           );
         }
       } else {
