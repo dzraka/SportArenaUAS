@@ -2,12 +2,12 @@ import 'package:final_project/data/server/model/user.dart';
 import 'package:final_project/data/server/repository/auth_repository.dart';
 import 'package:final_project/data/service/http_service.dart';
 import 'package:final_project/presentation/Setting/setting_page.dart';
-import 'package:final_project/presentation/admin/booking/booking_index_admin.dart';
-import 'package:final_project/presentation/admin/dashboard_admin.dart';
-import 'package:final_project/presentation/admin/field/field_index.dart';
+import 'package:final_project/presentation/admin/booking/admin_booking_index.dart';
+import 'package:final_project/presentation/admin/admin_home_page.dart';
+import 'package:final_project/presentation/admin/field/admin_field_index.dart';
 import 'package:final_project/presentation/admin/user/user_index.dart';
-import 'package:final_project/presentation/customer/booking/booking_index_customer.dart';
-import 'package:final_project/presentation/customer/dahsboard_customer.dart';
+import 'package:final_project/presentation/customer/booking/customer_booking_history_page.dart';
+import 'package:final_project/presentation/customer/customer_home_page.dart';
 import 'package:flutter/material.dart';
 
 class SaNavigator extends StatefulWidget {
@@ -57,9 +57,9 @@ class _SaNavigatorState extends State<SaNavigator> {
 
             if (activeUser.role == 'admin') {
               pages = [
-                DashboardAdmin(),
-                FieldIndex(),
-                BookingIndexAdmin(),
+                AdminHomePage(),
+                AdminFieldIndex(),
+                AdminBookingIndex(),
                 UserIndex(),
                 SettingPage(),
               ];
@@ -74,19 +74,19 @@ class _SaNavigatorState extends State<SaNavigator> {
                 BottomNavigationBarItem(
                   icon: Icon(Icons.stadium_outlined),
                   activeIcon: Icon(Icons.stadium),
-                  label: 'Manage Arena',
+                  label: 'Arena',
                 ),
 
                 BottomNavigationBarItem(
                   icon: Icon(Icons.receipt_outlined),
                   activeIcon: Icon(Icons.receipt),
-                  label: 'Manage Booking',
+                  label: 'Booking',
                 ),
 
                 BottomNavigationBarItem(
                   icon: Icon(Icons.people_outline),
                   activeIcon: Icon(Icons.people),
-                  label: 'Manage User',
+                  label: 'User',
                 ),
 
                 BottomNavigationBarItem(
@@ -97,8 +97,8 @@ class _SaNavigatorState extends State<SaNavigator> {
               ];
             } else {
               pages = [
-                DahsboardCustomer(),
-                BookingIndexCustomer(),
+                CustomerHomePage(),
+                CustomerBookingHistoryPage(),
                 SettingPage(),
               ];
 
@@ -112,7 +112,7 @@ class _SaNavigatorState extends State<SaNavigator> {
                 BottomNavigationBarItem(
                   icon: Icon(Icons.receipt_outlined),
                   activeIcon: Icon(Icons.receipt),
-                  label: 'Booking History',
+                  label: 'History',
                 ),
 
                 BottomNavigationBarItem(
@@ -132,7 +132,6 @@ class _SaNavigatorState extends State<SaNavigator> {
                 currentIndex: _currentIndex,
                 onTap: (value) => setState(() => _currentIndex = value),
                 type: BottomNavigationBarType.fixed,
-                unselectedItemColor: Colors.grey,
                 showUnselectedLabels: true,
                 items: navItems,
               ),
