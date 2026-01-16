@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:final_project/data/server/usecase/request/add_field_request.dart';
 import 'package:final_project/data/server/usecase/response/get_all_field_response.dart';
 import 'package:final_project/data/server/usecase/response/get_field_response.dart';
@@ -18,10 +20,17 @@ class FieldRepository {
         headers: {'Authorization': 'Bearer $token'},
       );
 
-      final responseData = GetAllFieldResponse.fromJson(response.body);
-      return responseData;
+      final responseBody = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        return GetAllFieldResponse.fromMap(responseBody);
+      } else {
+        throw Exception(
+          responseBody['message'] ?? 'Failed to fetch field data',
+        );
+      }
     } catch (e) {
-      throw Exception('Error getting fields: $e');
+      throw Exception('Field Repository Error: $e');
     }
   }
 
@@ -34,7 +43,8 @@ class FieldRepository {
         headers: {'Authorization': 'Bearer $token'},
       );
 
-      final responseData = GetFieldResponse.fromJson(response.body);
+      final responseBody = jsonDecode(response.body);
+      final responseData = GetFieldResponse.fromJson(responseBody);
       return responseData;
     } catch (e) {
       throw Exception('Error getting field detail $e');
@@ -50,7 +60,8 @@ class FieldRepository {
         headers: {'Authorization': 'Bearer $token'},
       );
 
-      final responseData = GetAllFieldResponse.fromJson(response.body);
+      final responseBody = jsonDecode(response.body);
+      final responseData = GetAllFieldResponse.fromJson(responseBody);
       return responseData;
     } catch (e) {
       throw Exception('Error getting futsal fields');
@@ -66,7 +77,8 @@ class FieldRepository {
         headers: {'Authorization': 'Bearer $token'},
       );
 
-      final responseData = GetAllFieldResponse.fromJson(response.body);
+      final responseBody = jsonDecode(response.body);
+      final responseData = GetAllFieldResponse.fromJson(responseBody);
       return responseData;
     } catch (e) {
       throw Exception('Error getting badminton fields');
@@ -82,7 +94,8 @@ class FieldRepository {
         headers: {'Authorization': 'Bearer $token'},
       );
 
-      final responseData = GetAllFieldResponse.fromJson(response.body);
+      final responseBody = jsonDecode(response.body);
+      final responseData = GetAllFieldResponse.fromJson(responseBody);
       return responseData;
     } catch (e) {
       throw Exception('Error getting basket fields');

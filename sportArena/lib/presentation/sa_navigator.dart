@@ -4,7 +4,7 @@ import 'package:final_project/data/service/http_service.dart';
 import 'package:final_project/presentation/Setting/setting_page.dart';
 import 'package:final_project/presentation/admin/booking/admin_booking_index.dart';
 import 'package:final_project/presentation/admin/admin_home_page.dart';
-import 'package:final_project/presentation/admin/field/admin_field_index.dart';
+import 'package:final_project/presentation/admin/field/edit_field_page.dart';
 import 'package:final_project/presentation/admin/user/user_index.dart';
 import 'package:final_project/presentation/customer/booking/customer_booking_history_page.dart';
 import 'package:final_project/presentation/customer/customer_home_page.dart';
@@ -57,10 +57,9 @@ class _SaNavigatorState extends State<SaNavigator> {
 
             if (activeUser.role == 'admin') {
               pages = [
-                AdminHomePage(),
-                AdminFieldIndex(),
-                AdminBookingIndex(),
+                AdminHomePage(user: activeUser),
                 UserIndex(),
+                AdminBookingIndex(),
                 SettingPage(),
               ];
 
@@ -72,21 +71,15 @@ class _SaNavigatorState extends State<SaNavigator> {
                 ),
 
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.stadium_outlined),
-                  activeIcon: Icon(Icons.stadium),
-                  label: 'Arena',
+                  icon: Icon(Icons.people_outline),
+                  activeIcon: Icon(Icons.people),
+                  label: 'User',
                 ),
 
                 BottomNavigationBarItem(
                   icon: Icon(Icons.receipt_outlined),
                   activeIcon: Icon(Icons.receipt),
                   label: 'Booking',
-                ),
-
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.people_outline),
-                  activeIcon: Icon(Icons.people),
-                  label: 'User',
                 ),
 
                 BottomNavigationBarItem(
