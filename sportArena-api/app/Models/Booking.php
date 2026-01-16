@@ -23,6 +23,6 @@ class Booking extends Model
 
     public function field()
     {
-        return $this->belongsTo(field::class);
+        return $this->belongsTo(Field::class);
     }
 }

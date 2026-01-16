@@ -40,7 +40,11 @@ class FieldController extends Controller
     public function store(StoreFieldRequest $request)
     {
         try {
-            $field = $this->fieldService->createField($request->validate());
+            $data = $request->validated();
+            if ($request->hasFile('image')) {
+                $data['image'] = $request->file('image');
+            }
+            $field = $this->fieldService->createField($data);
 
             return response()->json([
                 'status' => 'success',

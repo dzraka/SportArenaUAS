@@ -20,7 +20,7 @@ class StoreFieldRequest extends FormRequest
                 'required',
                 'string',
                 'max:255',
-                'unique:field,name' . $fieldId
+                'unique:fields,name' . $fieldId
             ],
             'type' => 'required|in:futsal, badminton, basket',
             'price_per_hour' => 'required|integer|min:0',

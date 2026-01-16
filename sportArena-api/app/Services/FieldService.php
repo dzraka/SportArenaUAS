@@ -26,15 +26,17 @@ class FieldService
 
     public function createField(array $data)
     {
-        $exist = Field::where('name', $data['name'])->exist();
+        $exist = Field::where('name', $data['name'])->exists();
 
         if ($exist) {
             throw new InvalidArgumentException('Field with the same name alredy exist');
         }
 
-        if (isset($data['image'])) {
+        if (isset($data['image']) && $data['image']) {
             $path = $data['image']->store('fields', 'public');
             $data['image_path'] = $path;
+        } else {
+            $data['image_path'] = null;
         }
 
         return DB::transaction(function () use ($data) {
@@ -48,7 +50,7 @@ class FieldService
 
         $exist = Field::where('name', $data['name'])
             ->where('id', '!=', $id)
-            ->exist();
+            ->exists();
 
         if ($exist) {
             throw new InvalidArgumentException('Field name alredy taken by another field');
