@@ -1,9 +1,13 @@
 import 'package:final_project/data/server/model/user.dart';
 import 'package:final_project/data/server/repository/auth_repository.dart';
 import 'package:final_project/data/service/http_service.dart';
-import 'package:final_project/presentation/booking/booking_index.dart';
-import 'package:final_project/presentation/home/home_page.dart';
-import 'package:final_project/presentation/profile.dart';
+import 'package:final_project/presentation/Setting/setting_page.dart';
+import 'package:final_project/presentation/admin/booking/booking_index_admin.dart';
+import 'package:final_project/presentation/admin/dashboard_admin.dart';
+import 'package:final_project/presentation/admin/field/field_index.dart';
+import 'package:final_project/presentation/admin/user/user_index.dart';
+import 'package:final_project/presentation/customer/booking/booking_index_customer.dart';
+import 'package:final_project/presentation/customer/dahsboard_customer.dart';
 import 'package:flutter/material.dart';
 
 class SaNavigator extends StatefulWidget {
@@ -47,35 +51,95 @@ class _SaNavigatorState extends State<SaNavigator> {
 
           if (snapshot.hasData && snapshot.data != null) {
             final User activeUser = snapshot.data!;
-            final List<Widget> pages = [HomePage(), BookingIndex(), Profile()];
-            return pages[_currentIndex];
+
+            List<Widget> pages;
+            List<BottomNavigationBarItem> navItems;
+
+            if (activeUser.role == 'admin') {
+              pages = [
+                DashboardAdmin(),
+                FieldIndex(),
+                BookingIndexAdmin(),
+                UserIndex(),
+                SettingPage(),
+              ];
+
+              navItems = const [
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.home_outlined),
+                  activeIcon: Icon(Icons.home),
+                  label: 'Home',
+                ),
+
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.stadium_outlined),
+                  activeIcon: Icon(Icons.stadium),
+                  label: 'Manage Arena',
+                ),
+
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.receipt_outlined),
+                  activeIcon: Icon(Icons.receipt),
+                  label: 'Manage Booking',
+                ),
+
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.people_outline),
+                  activeIcon: Icon(Icons.people),
+                  label: 'Manage User',
+                ),
+
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.settings_outlined),
+                  activeIcon: Icon(Icons.settings),
+                  label: 'Setting',
+                ),
+              ];
+            } else {
+              pages = [
+                DahsboardCustomer(),
+                BookingIndexCustomer(),
+                SettingPage(),
+              ];
+
+              navItems = const [
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.home_outlined),
+                  activeIcon: Icon(Icons.home),
+                  label: 'Home',
+                ),
+
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.receipt_outlined),
+                  activeIcon: Icon(Icons.receipt),
+                  label: 'Booking History',
+                ),
+
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.settings_outlined),
+                  activeIcon: Icon(Icons.settings),
+                  label: 'Setting',
+                ),
+              ];
+            }
+            if (_currentIndex >= pages.length) {
+              _currentIndex = 0;
+            }
+
+            return Scaffold(
+              body: pages[_currentIndex],
+              bottomNavigationBar: BottomNavigationBar(
+                currentIndex: _currentIndex,
+                onTap: (value) => setState(() => _currentIndex = value),
+                type: BottomNavigationBarType.fixed,
+                unselectedItemColor: Colors.grey,
+                showUnselectedLabels: true,
+                items: navItems,
+              ),
+            );
           }
           return const Center(child: Text('Failed to load'));
         },
-      ),
-
-      bottomNavigationBar: BottomNavigationBar(
-        onTap: (value) => setState(() => _currentIndex = value),
-        currentIndex: _currentIndex,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined),
-            label: 'Home',
-            activeIcon: Icon(Icons.home),
-          ),
-
-          BottomNavigationBarItem(
-            icon: Icon(Icons.receipt_outlined),
-            label: 'Booking',
-            activeIcon: Icon(Icons.receipt),
-          ),
-
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline),
-            label: 'Profile',
-            activeIcon: Icon(Icons.person),
-          ),
-        ],
       ),
     );
   }
