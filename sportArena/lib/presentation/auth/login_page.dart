@@ -2,7 +2,6 @@ import 'package:final_project/data/server/repository/auth_repository.dart';
 import 'package:final_project/data/server/usecase/request/login_request.dart';
 import 'package:final_project/data/service/http_service.dart';
 import 'package:final_project/presentation/auth/register_page.dart';
-import 'package:final_project/presentation/home/home_page.dart';
 import 'package:final_project/presentation/sa_navigator.dart';
 import 'package:flutter/material.dart';
 
