@@ -4,6 +4,7 @@ import 'package:final_project/data/server/usecase/request/add_field_request.dart
 import 'package:final_project/data/server/usecase/response/get_all_field_response.dart';
 import 'package:final_project/data/server/usecase/response/get_field_response.dart';
 import 'package:final_project/data/service/http_service.dart';
+import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FieldRepository {
@@ -106,11 +107,30 @@ class FieldRepository {
     final token = await _getToken();
 
     try {
-      final response = await httpService.post(
-        'admin/fields',
-        request.toMap(),
-        headers: {'Authorization': 'Bearer $token'},
-      );
+      http.Response response;
+      if (request.image != null) {
+        // Kirim sebagai multipart
+        final fields = {
+          'name': request.name,
+          'type': request.category,
+          'price_per_hour': request.price.toString(),
+          'is_available': request.isAvailable ? '1' : '0',
+        };
+        response = await httpService.postWithFile(
+          'admin/fields',
+          fields,
+          request.image,
+          'image',
+          headers: {'Authorization': 'Bearer $token'},
+        );
+      } else {
+        // Kirim sebagai JSON biasa
+        response = await httpService.post(
+          'admin/fields',
+          request.toMap(),
+          headers: {'Authorization': 'Bearer $token'},
+        );
+      }
 
       return response.statusCode == 200 || response.statusCode == 201;
     } catch (e) {
