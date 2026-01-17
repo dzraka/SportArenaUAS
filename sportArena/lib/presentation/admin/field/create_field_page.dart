@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:final_project/data/server/repository/field_repository.dart';
 import 'package:final_project/data/server/usecase/request/add_field_request.dart';
 import 'package:final_project/data/service/http_service.dart';
+import 'package:final_project/presentation/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -242,24 +243,10 @@ class _CreateFieldPageState extends State<CreateFieldPage> {
 
                 const SizedBox(height: 24),
 
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: _isLoading ? null : _submitForm,
-                    child: _isLoading
-                        ? SizedBox(
-                            width: 20,
-                            height: 20,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              color: Colors.white,
-                            ),
-                          )
-                        : Text(
-                            'Tambah Lapangan',
-                            style: TextStyle(fontSize: 16),
-                          ),
-                  ),
+                PrimaryButton(
+                  text: 'Tambah Lapangan',
+                  isLoading: _isLoading,
+                  onPressed: _submitForm,
                 ),
               ],
             ),

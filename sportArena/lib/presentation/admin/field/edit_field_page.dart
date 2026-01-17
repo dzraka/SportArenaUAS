@@ -5,6 +5,7 @@ import 'package:final_project/data/server/model/field.dart';
 import 'package:final_project/data/server/repository/field_repository.dart';
 import 'package:final_project/data/server/usecase/request/add_field_request.dart';
 import 'package:final_project/data/service/http_service.dart';
+import 'package:final_project/presentation/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -304,50 +305,20 @@ class _EditFieldPageState extends State<EditFieldPage> {
 
                 const SizedBox(height: 24),
 
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: _isLoading ? null : _submitForm,
-                    child: _isLoading
-                        ? const SizedBox(
-                            width: 20,
-                            height: 20,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              color: Colors.white,
-                            ),
-                          )
-                        : const Text(
-                            'Update Lapangan',
-                            style: TextStyle(fontSize: 16),
-                          ),
-                  ),
+                PrimaryButton(
+                  text: 'Update lapangan',
+                  isLoading: _isLoading,
+                  onPressed: _submitForm,
                 ),
 
                 const SizedBox(height: 16),
 
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      foregroundColor: Colors.white,
-                      backgroundColor: Colors.red,
-                    ),
-                    onPressed: _isLoading ? null : _delete,
-                    child: _isLoading
-                        ? const SizedBox(
-                            width: 20,
-                            height: 20,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              color: Colors.white,
-                            ),
-                          )
-                        : const Text(
-                            'Hapus Langan',
-                            style: TextStyle(fontSize: 16),
-                          ),
-                  ),
+                PrimaryButton(
+                  text: 'Hapus lapangan',
+                  isLoading: _isLoading,
+                  onPressed: _delete,
+                  backgroundColor: Colors.red,
+                  textColor: Colors.white,
                 ),
               ],
             ),
