@@ -1,8 +1,9 @@
+import 'package:final_project/core/navigation/sa_navigator.dart';
 import 'package:final_project/data/server/repository/auth_repository.dart';
 import 'package:final_project/data/server/usecase/request/login_request.dart';
 import 'package:final_project/data/service/http_service.dart';
 import 'package:final_project/presentation/auth/register_page.dart';
-import 'package:final_project/presentation/sa_navigator.dart';
+import 'package:final_project/presentation/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -89,7 +90,7 @@ class _LoginPageState extends State<LoginPage> {
                 MaterialPageRoute(builder: (context) => RegisterPage()),
               );
             },
-            child: Text('Register'),
+            child: Text('Daftar'),
           ),
         ],
       ),
@@ -109,7 +110,7 @@ class _LoginPageState extends State<LoginPage> {
           const SizedBox(height: 24.0),
 
           Text(
-            'Login',
+            'Masuk',
             style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,
           ),
@@ -117,7 +118,7 @@ class _LoginPageState extends State<LoginPage> {
           const SizedBox(height: 8.0),
 
           Text(
-            'Welcome back! We missed your spirit on the court. Ready to create some more great memories?',
+            'Selamat datang kembali. Silakan masuk untuk melanjutkan aktivitas Anda.',
             style: TextStyle(fontSize: 14, height: 1.5),
             textAlign: TextAlign.center,
           ),
@@ -148,9 +149,9 @@ class _LoginPageState extends State<LoginPage> {
                   controller: _emailCtr,
                   validator: (value) {
                     if (value!.isEmpty) {
-                      return 'Email is required';
+                      return 'Email harus diisi';
                     } else if (!value.contains('@') || !value.contains('.')) {
-                      return 'Invalid email format';
+                      return 'Format email tidak valid';
                     }
                     return null;
                   },
@@ -158,7 +159,7 @@ class _LoginPageState extends State<LoginPage> {
                   textInputAction: TextInputAction.next,
                   decoration: InputDecoration(
                     labelText: 'Email',
-                    hintText: 'Enter your email',
+                    hintText: 'Masukkan email Anda',
                     prefixIcon: Icon(Icons.email_outlined),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16.0),
@@ -173,9 +174,9 @@ class _LoginPageState extends State<LoginPage> {
                   controller: _passwordCtr,
                   validator: (value) {
                     if (value!.isEmpty) {
-                      return "Password is required";
+                      return "Password harus diisi";
                     } else if (value.length < 8) {
-                      return "Password must be at least 8 characters";
+                      return "Password minimal 8 karakter";
                     }
                     return null;
                   },
@@ -183,7 +184,7 @@ class _LoginPageState extends State<LoginPage> {
                   obscureText: isObscure,
                   decoration: InputDecoration(
                     labelText: 'Password',
-                    hintText: 'Enter your password',
+                    hintText: 'Masukkan password Anda',
                     prefixIcon: Icon(Icons.lock_outline),
                     suffixIcon: IconButton(
                       onPressed: () {
@@ -204,27 +205,10 @@ class _LoginPageState extends State<LoginPage> {
 
                 SizedBox(height: 24),
 
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: _isLoading ? null : _login,
-                    child: _isLoading
-                        ? const SizedBox(
-                            height: 20,
-                            width: 20,
-                            child: CircularProgressIndicator(
-                              color: Colors.white,
-                              strokeWidth: 2,
-                            ),
-                          )
-                        : const Text(
-                            'Login',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                  ),
+                PrimaryButton(
+                  text: 'Masuk',
+                  isLoading: _isLoading,
+                  onPressed: _login,
                 ),
               ],
             ),

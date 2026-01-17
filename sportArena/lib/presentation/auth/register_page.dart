@@ -2,6 +2,7 @@ import 'package:final_project/data/server/repository/auth_repository.dart';
 import 'package:final_project/data/server/usecase/request/register_request.dart';
 import 'package:final_project/data/service/http_service.dart';
 import 'package:final_project/presentation/auth/login_page.dart';
+import 'package:final_project/presentation/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -100,7 +101,7 @@ class _RegisterPageState extends State<RegisterPage> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('Login'),
+            child: Text('Masuk'),
           ),
         ],
       ),
@@ -118,7 +119,7 @@ class _RegisterPageState extends State<RegisterPage> {
           const SizedBox(height: 24.0),
 
           Text(
-            'Register',
+            'Daftar',
             style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,
           ),
@@ -126,7 +127,7 @@ class _RegisterPageState extends State<RegisterPage> {
           const SizedBox(height: 8.0),
 
           Text(
-            'Your journey starts here. Join us today and bring your unique energy to every match you play',
+            'Bergabunglah bersama kami. Daftarkan diri Anda untuk kemudahan akses venue.',
             style: TextStyle(fontSize: 14, height: 1.5),
             textAlign: TextAlign.center,
           ),
@@ -157,14 +158,14 @@ class _RegisterPageState extends State<RegisterPage> {
                   controller: _nameCtr,
                   validator: (value) {
                     if (value!.isEmpty) {
-                      return 'Name is required';
+                      return 'Nama wajib diisi';
                     }
                     return null;
                   },
                   textInputAction: TextInputAction.next,
                   decoration: InputDecoration(
-                    labelText: 'Full Name',
-                    hintText: 'Enter your name',
+                    labelText: 'Nama Lengkap',
+                    hintText: 'Masukkan nama Anda',
                     prefixIcon: Icon(Icons.person_outline),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16.0),
@@ -179,9 +180,9 @@ class _RegisterPageState extends State<RegisterPage> {
                   controller: _emailCtr,
                   validator: (value) {
                     if (value!.isEmpty) {
-                      return 'Email is required';
+                      return 'Email wajib diisi';
                     } else if (!value.contains('@') || !value.contains('.')) {
-                      return 'Invalid email format';
+                      return 'Format email tidak valid';
                     }
                     return null;
                   },
@@ -189,7 +190,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   textInputAction: TextInputAction.next,
                   decoration: InputDecoration(
                     labelText: 'Email',
-                    hintText: 'Enter your email',
+                    hintText: 'Masukkan email Anda',
                     prefixIcon: Icon(Icons.email_outlined),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16.0),
@@ -204,13 +205,13 @@ class _RegisterPageState extends State<RegisterPage> {
                   controller: _phoneCtr,
                   validator: (value) {
                     if (value!.isEmpty) {
-                      return 'Phone number is required';
+                      return 'Nomor telepon wajib diisi';
                     }
                     if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
-                      return "Phone number must contains only number";
+                      return "Nomor telepon hanya boleh berisi angka";
                     }
                     if (value.length < 10 || value.length > 13) {
-                      return "Phone number must be between 10 and 13 digits";
+                      return "Nomor telepon harus 10-13 digit";
                     }
                     return null;
                   },
@@ -218,8 +219,8 @@ class _RegisterPageState extends State<RegisterPage> {
                   textInputAction: TextInputAction.next,
                   maxLength: 13,
                   decoration: InputDecoration(
-                    labelText: 'Phone Number',
-                    hintText: 'Enter phone number',
+                    labelText: 'Nomor Telepon',
+                    hintText: 'Masukkan nomor telepon',
                     prefixIcon: Icon(Icons.phone_android),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16.0),
@@ -235,17 +236,17 @@ class _RegisterPageState extends State<RegisterPage> {
                   controller: _passwordCtr,
                   validator: (value) {
                     if (value!.isEmpty) {
-                      return "Password is required";
+                      return "Kata sandi wajib diisi";
                     } else if (value.length < 8) {
-                      return "Password must be at least 8 characters";
+                      return "Kata sandi minimal 8 karakter";
                     }
                     return null;
                   },
                   textInputAction: TextInputAction.next,
                   obscureText: isObscure,
                   decoration: InputDecoration(
-                    labelText: 'Password',
-                    hintText: 'Enter your password',
+                    labelText: 'Kata Sandi',
+                    hintText: 'Masukkan kata sandi',
                     prefixIcon: Icon(Icons.lock_outline),
                     suffixIcon: IconButton(
                       onPressed: () {
@@ -270,17 +271,17 @@ class _RegisterPageState extends State<RegisterPage> {
                   controller: _confirmCtr,
                   validator: (value) {
                     if (value!.isEmpty) {
-                      return "Password is required";
+                      return "Konfirmasi kata sandi wajib diisi";
                     } else if (value != _passwordCtr.text) {
-                      return "Passwords do not match";
+                      return "Kata sandi tidak cocok";
                     }
                     return null;
                   },
                   textInputAction: TextInputAction.done,
                   obscureText: isConfirmObscure,
                   decoration: InputDecoration(
-                    labelText: 'Confirm Password',
-                    hintText: 'Re-enter your password',
+                    labelText: 'Konfirmasi Kata Sandi',
+                    hintText: 'Masukkan ulang kata sandi',
                     prefixIcon: Icon(Icons.lock_outline),
                     suffixIcon: IconButton(
                       onPressed: () {
@@ -303,27 +304,10 @@ class _RegisterPageState extends State<RegisterPage> {
 
                 SizedBox(height: 24),
 
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: _isLoading ? null : _register,
-                    child: _isLoading
-                        ? const SizedBox(
-                            height: 20,
-                            width: 20,
-                            child: CircularProgressIndicator(
-                              color: Colors.white,
-                              strokeWidth: 2,
-                            ),
-                          )
-                        : const Text(
-                            'Register',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                  ),
+                PrimaryButton(
+                  text: 'Daftar',
+                  isLoading: _isLoading,
+                  onPressed: _register,
                 ),
               ],
             ),
