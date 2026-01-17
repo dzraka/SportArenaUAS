@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:final_project/data/server/model/field.dart';
 import 'package:final_project/data/server/repository/field_repository.dart';
@@ -119,6 +120,63 @@ class _EditFieldPageState extends State<EditFieldPage> {
             _isLoading = false;
           });
         }
+      }
+    }
+  }
+
+  void _delete() async {
+    final bool? confirmDelete = await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Hapus Lapangan'),
+        content: Text(
+          'Apakah anda yakin ingin menghapus lapangan? ${widget.field.name}?',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Batal'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Hapus'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmDelete != true) return;
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      final isSuccess = await _fieldRepository.deleteField(widget.field.id);
+
+      if (isSuccess) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Berhasil menghapus data'),
+              backgroundColor: Colors.green,
+            ),
+          );
+          Navigator.pop(context, true);
+        } else {
+          throw Exception('Gagal menghapus data');
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Error: ${e.toString().replaceAll('Exception:', '')}',
+            ),
+            backgroundColor: Colors.red,
+          ),
+        );
       }
     }
   }
@@ -261,6 +319,32 @@ class _EditFieldPageState extends State<EditFieldPage> {
                           )
                         : const Text(
                             'Update Lapangan',
+                            style: TextStyle(fontSize: 16),
+                          ),
+                  ),
+                ),
+
+                const SizedBox(height: 16),
+
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: Colors.white,
+                      backgroundColor: Colors.red,
+                    ),
+                    onPressed: _isLoading ? null : _delete,
+                    child: _isLoading
+                        ? const SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: Colors.white,
+                            ),
+                          )
+                        : const Text(
+                            'Hapus Langan',
                             style: TextStyle(fontSize: 16),
                           ),
                   ),
