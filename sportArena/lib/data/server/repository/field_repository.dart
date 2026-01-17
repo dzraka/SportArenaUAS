@@ -109,7 +109,6 @@ class FieldRepository {
     try {
       http.Response response;
       if (request.image != null) {
-        // Kirim sebagai multipart
         final fields = {
           'name': request.name,
           'type': request.category,
@@ -124,7 +123,6 @@ class FieldRepository {
           headers: {'Authorization': 'Bearer $token'},
         );
       } else {
-        // Kirim sebagai JSON biasa
         response = await httpService.post(
           'admin/fields',
           request.toMap(),
@@ -142,13 +140,43 @@ class FieldRepository {
     final token = await _getToken();
 
     try {
-      final response = await httpService.post(
-        'admin/fields/$id',
-        request.toMap(),
-        headers: {'Authorization': 'Bearer $token'},
-      );
+      http.Response response;
+      if (request.image != null) {
+        final fields = {
+          'name': request.name,
+          'type': request.category,
+          'price_per_hour': request.price.toString(),
+          'is_available': request.isAvailable ? '1' : '0',
+        };
+        response = await httpService.postWithFile(
+          'admin/fields/$id',
+          fields,
+          request.image,
+          'image',
+          headers: {'Authorization': 'Bearer $token'},
+        );
+      } else {
+        response = await httpService.post(
+          'admin/fields/$id',
+          {
+            'name': request.name,
+            'type': request.category,
+            'price_per_hour': request.price,
+            'is_available': request.isAvailable ? 1 : 0,
+          },
+          headers: {'Authorization': 'Bearer $token'},
+        );
+      }
 
-      return response.statusCode == 200;
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        print(
+          "Error Code: ${response.statusCode}\n"
+          "Body: ${response.body}",
+        );
+        return false;
+      }
     } catch (e) {
       throw Exception('Update field failed: $e');
     }
