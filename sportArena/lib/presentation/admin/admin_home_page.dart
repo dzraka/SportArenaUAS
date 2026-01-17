@@ -238,11 +238,11 @@ class _AdminHomePageState extends State<AdminHomePage> {
                       ),
                       child: InkWell(
                         borderRadius: BorderRadius.circular(16),
-                        onTap: () {
-                          Navigator.push(
+                        onTap: () async {
+                          await Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => EditFieldPage(),
+                              builder: (context) => EditFieldPage(field: field),
                             ),
                           );
                           _loadFields();
