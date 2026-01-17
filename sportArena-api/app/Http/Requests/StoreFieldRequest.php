@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreFieldRequest extends FormRequest
 {
@@ -13,19 +14,21 @@ class StoreFieldRequest extends FormRequest
 
     public function rules(): array
     {
-        $fieldId = $this->route('field') ? $this->route('field')->id : null;
+        $routeParam = $this->route('field') ?? $this->route('id');
+        $fieldId = is_object($routeParam) ? $routeParam->id : $routeParam;
 
         return [
             'name' => [
                 'required',
                 'string',
                 'max:255',
-                'unique:fields,name' . $fieldId
+                Rule::unique('fields', 'name')->ignore($fieldId),
             ],
-            'type' => 'required|in:futsal, badminton, basket',
+            'type' => 'required|in:futsal,badminton,basket',
             'price_per_hour' => 'required|integer|min:0',
             'description' => 'nullable|string',
-            'image' => 'nullable|image|mimes:png,jpg,jpeg|max:2048'
+            'image' => 'nullable|image|mimes:png,jpg,jpeg|max:2048',
+            'is_available' => 'boolean'
         ];
     }
 

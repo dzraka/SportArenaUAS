@@ -18,6 +18,11 @@ class Field extends Model
         'is_available'
     ];
 
+    protected $casts = [
+        'is_available' => 'boolean',
+        'price_per_hour' => 'integer',
+    ];
+
     public function bookings()
     {
         return $this->hasMany(Booking::class);
