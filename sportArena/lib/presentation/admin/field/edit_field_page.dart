@@ -295,7 +295,11 @@ class _EditFieldPageState extends State<EditFieldPage> {
                       });
                     },
                     title: const Text('Status'),
-                    subtitle: Text(_isAvailable ? 'Aktif' : 'Maintenance'),
+                    subtitle: Text(
+                      _isAvailable
+                          ? 'Lapangan aktif dan bisa dipesan'
+                          : 'Lapangan sedang maintenance',
+                    ),
                     secondary: Icon(
                       _isAvailable ? Icons.check_circle : Icons.cancel,
                       color: _isAvailable ? Colors.green : Colors.red,
