@@ -57,7 +57,7 @@ class _SaNavigatorState extends State<SaNavigator> {
             if (activeUser.role == 'admin') {
               pages = [
                 AdminHomePage(user: activeUser),
-                UserIndex(),
+                UserIndex(user: activeUser),
                 AdminBookingIndex(),
                 SettingPage(user: activeUser),
               ];

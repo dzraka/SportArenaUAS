@@ -40,7 +40,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
       final response = await _fieldRepository.getAllFields();
       if (mounted) {
         setState(() {
-          _allFields = response.data ?? [];
+          _allFields = response.data;
           _filteredFields = _allFields;
           _isLoading = false;
         });

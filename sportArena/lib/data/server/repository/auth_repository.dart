@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:final_project/data/server/usecase/request/login_request.dart';
 import 'package:final_project/data/server/usecase/request/register_request.dart';
+import 'package:final_project/data/server/usecase/response/get_all_user_response.dart';
 import 'package:final_project/data/server/usecase/response/get_user_response.dart';
 import 'package:final_project/data/server/usecase/response/login_response.dart';
 import 'package:final_project/data/server/usecase/response/register_response.dart';
@@ -72,19 +73,19 @@ class AuthRepository {
     }
   }
 
-  Future<GetUserResponse> getAllUser() async {
+  Future<GetAllUserResponse> getAllUser() async {
     final token = await _getToken();
 
     try {
       final response = await httpService.get(
-        '/admin/users',
+        'admin/users',
         headers: {'Authorization': 'Bearer $token'},
       );
 
       final responseBody = jsonDecode(response.body);
 
       if (response.statusCode == 200) {
-        return GetUserResponse.fromMap(responseBody);
+        return GetAllUserResponse.fromMap(responseBody);
       } else {
         throw Exception(responseBody['message'] ?? 'Failed to fetch user data');
       }
