@@ -10,6 +10,11 @@ use Illuminate\Validation\ValidationException;
 
 class AuthService
 {
+    public function getAllUsers() 
+    {
+        return User::orderBy('id', 'asc')->get();
+    }
+
     public function register(array $data)
     {
         $user = User::create([

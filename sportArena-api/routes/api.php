@@ -30,6 +30,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/fields/{id}', [FieldController::class, 'update']);
         Route::delete('/fields/{id}', [FieldController::class, 'destroy']);
 
+        Route::get('/user', [AuthController::class, 'index']);
+
         Route::get('/bookings', [BookingController::class, 'index']);
         Route::post('/bookings/{id}/status', [BookingController::class, 'update']);
     });

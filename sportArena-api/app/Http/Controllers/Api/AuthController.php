@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Http\Resources\UserResource;
 use App\Services\AuthService;
 use Illuminate\Http\Request;
 
@@ -15,6 +16,22 @@ class AuthController extends Controller
     public function __construct(AuthService $authService)
     {
         $this->authService = $authService;
+    }
+
+    /**
+     * Get all users
+     * 
+     * Mendapatkan daftar semua user.
+     */
+    public function index() 
+    {
+        $users = $this->authService->getAllUsers();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Users retrieved successfully',
+            'data' => UserResource::collection($users)
+        ]);
     }
 
     /**
