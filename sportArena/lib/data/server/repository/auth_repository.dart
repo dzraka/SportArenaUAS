@@ -72,6 +72,27 @@ class AuthRepository {
     }
   }
 
+  Future<GetUserResponse> getAllUser() async {
+    final token = await _getToken();
+
+    try {
+      final response = await httpService.get(
+        '/admin/users',
+        headers: {'Authorization': 'Bearer $token'},
+      );
+
+      final responseBody = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        return GetUserResponse.fromMap(responseBody);
+      } else {
+        throw Exception(responseBody['message'] ?? 'Failed to fetch user data');
+      }
+    } catch (e) {
+      throw Exception('User Repository Error: $e');
+    }
+  }
+
   Future<GetUserResponse> getUserProfile() async {
     final token = await _getToken();
 
