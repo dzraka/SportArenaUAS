@@ -59,7 +59,7 @@ class _SaNavigatorState extends State<SaNavigator> {
                 AdminHomePage(user: activeUser),
                 UserIndex(),
                 AdminBookingIndex(),
-                SettingPage(),
+                SettingPage(user: activeUser),
               ];
 
               navItems = const [
@@ -91,7 +91,7 @@ class _SaNavigatorState extends State<SaNavigator> {
               pages = [
                 CustomerHomePage(),
                 CustomerBookingHistoryPage(),
-                SettingPage(),
+                SettingPage(user: activeUser),
               ];
 
               navItems = const [

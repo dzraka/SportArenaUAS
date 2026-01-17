@@ -1,9 +1,12 @@
+import 'package:final_project/data/server/model/user.dart';
 import 'package:final_project/presentation/Setting/profile_page.dart';
 import 'package:final_project/presentation/auth/login_page.dart';
 import 'package:flutter/material.dart';
 
 class SettingPage extends StatefulWidget {
-  const SettingPage({super.key});
+  final User user;
+
+  const SettingPage({super.key, required this.user});
 
   @override
   State<SettingPage> createState() => _SettingPageState();
@@ -24,7 +27,9 @@ class _SettingPageState extends State<SettingPage> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => ProfilePage()),
+                MaterialPageRoute(
+                  builder: (context) => ProfilePage(user: widget.user),
+                ),
               );
             },
           ),

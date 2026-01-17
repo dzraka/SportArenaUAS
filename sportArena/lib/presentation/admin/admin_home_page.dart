@@ -124,7 +124,9 @@ class _AdminHomePageState extends State<AdminHomePage> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Profile()),
+                        MaterialPageRoute(
+                          builder: (context) => ProfilePage(user: widget.user),
+                        ),
                       );
                     },
                     borderRadius: BorderRadius.circular(50),
