@@ -34,36 +34,42 @@ class BookingService
 
     public function createBooking(User $user, array $data)
     {
+        $dateStr = Carbon::parse($data['booking_date'])->format('Y-m-d');
+
         $isBooked = Booking::where('field_id', $data['field_id'])
-            ->where('booking_date', $data['booking_date'])
+            ->where('booking_date', $dateStr) 
             ->where('status', '!=', 'cancelled')
             ->where(function ($query) use ($data) {
-                $query->whereBetween('start_time', '<', $data['end_time'])
-                    ->where('end_time', '>', $data['start_time']);
+                $query->where('start_time', '<', $data['end_time'])
+                      ->where('end_time', '>', $data['start_time']);
             })
             ->exists();
 
         if ($isBooked) {
-            throw new InvalidArgumentException('The field is already booked for the selected time slot, please choose another time.');
+            throw new InvalidArgumentException('The field is already booked for the selected time slot.');
         }
 
         $field = Field::findOrFail($data['field_id']);
 
-        $start = Carbon::parse($data['start_time']);
-        $end = Carbon::parse($data['end_time']);
+        $start = Carbon::parse($dateStr . ' ' . $data['start_time']);
+        $end   = Carbon::parse($dateStr . ' ' . $data['end_time']);
 
-        $duration = $end->diffInHours($start);
-        if ($duration <= 0) {
+        if ($end->lessThanOrEqualTo($start)) {
+             throw new InvalidArgumentException('End time must be after start time.');
+        }
+
+        if ($start->diffInMinutes($end) < 60) {
             throw new InvalidArgumentException('The minimum booking duration is 1 hour.');
         }
 
-        $totalPrice = $duration * $field->price_per_hour;
+        $durationInHours = $start->floatDiffInHours($end);
+        $totalPrice = $durationInHours * $field->price_per_hour;
 
-        return DB::transaction(function () use ($user, $field, $data, $totalPrice) {
+        return DB::transaction(function () use ($user, $field, $data, $totalPrice, $dateStr) {
             return Booking::create([
                 'user_id' => $user->id,
                 'field_id' => $field->id,
-                'booking_date' => $data['booking_date'],
+                'booking_date' => $dateStr, 
                 'start_time' => $data['start_time'],
                 'end_time' => $data['end_time'],
                 'total_price' => $totalPrice,

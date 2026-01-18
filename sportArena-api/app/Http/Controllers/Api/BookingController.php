@@ -43,7 +43,7 @@ class BookingController extends Controller
         try {
             $booking = $this->bookingService->createBooking(
                 $request->user(),
-                $request->validate()
+                $request->validated()
             );
 
             return response()->json([
@@ -67,7 +67,7 @@ class BookingController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $request->validate([
+        $request->validated([
             'status' => 'required|in:pending,confirmed,completed,cancelled'
         ]);
 

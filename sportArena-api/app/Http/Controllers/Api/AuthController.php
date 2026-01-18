@@ -117,7 +117,7 @@ class AuthController extends Controller
      */
     public function updateProfile(Request $request)
     {
-        $request->validate([
+        $request->validated([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email' . $request->user()->id,
             'phone_number' => 'required|string|min:10|max:13',
