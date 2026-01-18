@@ -9,6 +9,9 @@ class FieldCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final imageUrl = field.imageUrl;
+    final hasImage = field.imageUrl != null && imageUrl!.isNotEmpty;
+
     return Card(
       margin: const EdgeInsets.only(bottom: 16.0),
       elevation: 2,
@@ -27,14 +30,14 @@ class FieldCard extends StatelessWidget {
                 borderRadius: const BorderRadius.vertical(
                   top: Radius.circular(16),
                 ),
-                image: (field.imageUrl != null)
+                image: hasImage
                     ? DecorationImage(
                         image: NetworkImage(field.imageUrl!),
                         fit: BoxFit.cover,
                       )
                     : null,
               ),
-              child: field.imageUrl == null
+              child: !hasImage
                   ? const Center(
                       child: Icon(Icons.image, size: 50, color: Colors.grey),
                     )
