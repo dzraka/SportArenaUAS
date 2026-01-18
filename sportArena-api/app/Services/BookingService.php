@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\DB;
 
 class BookingService
 {
-    public function getAllBokings()
+    public function getAllBookings()
     {
         return Booking::with(['user', 'field'])
             ->orderBy('booking_date', 'desc')

@@ -7,6 +7,7 @@ use App\Http\Requests\StoreBookingRequest;
 use App\Http\Resources\BookingResource;
 use App\Services\BookingService;
 use Illuminate\Http\Request;
+use App\Models\Booking;
 
 class BookingController extends Controller
 {
@@ -24,11 +25,34 @@ class BookingController extends Controller
      */
     public function index()
     {
-        $bookings = $this->bookingService->getAllBokings();
+        $bookings = $this->bookingService->getAllBookings();
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Bookings retrieved successfully',
+            'message' => 'All bookings retrieved (Admin)',
+            'data' => BookingResource::collection($bookings)
+        ]);
+    }
+
+    /**
+     * Check Field Availability
+     * 
+     * Mengambil daftar slot waktu yang sudah dibooking
+     */
+    public function checkSlots(Request $request)
+    {
+        $request->validate([
+            'field_id' => 'required',
+            'booking_date' => 'required|date',
+        ]);
+        $query = Booking::query();
+        $query->where('field_id', $request->field_id);
+        $query->whereDate('booking_date', $request->booking_date);
+        $query->where('status', '!=', 'cancelled'); 
+        $bookings = $query->get();
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Slots retrieved successfully',
             'data' => BookingResource::collection($bookings)
         ]);
     }
@@ -67,7 +91,7 @@ class BookingController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $request->validated([
+        $request->validate([
             'status' => 'required|in:pending,confirmed,completed,cancelled'
         ]);
 
