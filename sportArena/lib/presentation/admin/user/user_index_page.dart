@@ -4,15 +4,15 @@ import 'package:final_project/data/service/http_service.dart';
 import 'package:final_project/presentation/widgets/loading_indicator.dart';
 import 'package:flutter/material.dart';
 
-class UserIndex extends StatefulWidget {
+class UserIndexPage extends StatefulWidget {
   final User user;
-  const UserIndex({super.key, required this.user});
+  const UserIndexPage({super.key, required this.user});
 
   @override
-  State<UserIndex> createState() => _UserIndexState();
+  State<UserIndexPage> createState() => _UserIndexPageState();
 }
 
-class _UserIndexState extends State<UserIndex> {
+class _UserIndexPageState extends State<UserIndexPage> {
   late AuthRepository _authRepository;
   List<User> _userList = [];
   bool _isLoading = true;
