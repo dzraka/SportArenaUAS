@@ -5,8 +5,8 @@ import 'package:final_project/data/server/model/user.dart';
 
 class Booking {
   final int id;
-  final User user;
-  final Field field;
+  final User? user;
+  final Field? field;
   final String bookingDate;
   final String startTime;
   final String endTime;
@@ -17,8 +17,8 @@ class Booking {
 
   Booking({
     required this.id,
-    required this.user,
-    required this.field,
+    this.user,
+    this.field,
     required this.bookingDate,
     required this.startTime,
     required this.endTime,
@@ -58,21 +58,21 @@ class Booking {
 
   factory Booking.fromMap(Map<String, dynamic> json) => Booking(
     id: json["id"],
-    user: User.fromMap(json["user"]),
-    field: Field.fromMap(json["field"]),
-    bookingDate: json["booking_date"],
-    startTime: json["start_time"],
-    endTime: json["end_time"],
+    user: json["user"] != null ? User.fromMap(json["user"]) : null,
+    field: json["field"] != null ? Field.fromMap(json["field"]) : null,
+    bookingDate: json["booking_date"]?.toString() ?? '-',
+    startTime: json["start_time"]?.toString() ?? '-',
+    endTime: json["end_time"]?.toString() ?? '-',
     totalPrice: int.tryParse(json["total_price"].toString()) ?? 0,
-    status: json["status"],
-    createdAt: json["created_at"],
-    createdAgo: json["created_ago"],
+    status: json["status"]?.toString() ?? 'pending',
+    createdAt: json["created_at"].toString(),
+    createdAgo: json["created_ago"].toString(),
   );
 
   Map<String, dynamic> toMap() => {
     "id": id,
-    "user": user.toMap(),
-    "field": field.toMap(),
+    "user": user?.toMap(),
+    "field": field?.toMap(),
     "booking_date": bookingDate,
     "start_time": startTime,
     "end_time": endTime,

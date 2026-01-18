@@ -38,12 +38,19 @@ class Field {
   String toJson() => json.encode(toMap());
 
   factory Field.fromMap(Map<String, dynamic> json) => Field(
-    id: json["id"],
-    name: json["name"],
-    category: json["category"],
-    price: int.tryParse(json["price"].toString()) ?? 0,
-    imageUrl: json["image_url"],
-    isAvailable: json["is_available"] == 1 || json["is_available"] == true,
+    id: json["id"] ?? 0,
+    name: json["name"]?.toString() ?? "Unknown Field",
+    category: json["category"]?.toString() ?? "-",
+    price:
+        int.tryParse(
+          (json["price"] ?? json["price_per_hour"] ?? 0).toString(),
+        ) ??
+        0,
+    imageUrl: json["image_url"]?.toString(),
+    isAvailable:
+        (json["is_available"] == 1 ||
+        json["is_available"] == true ||
+        json["is_available"].toString() == '1'),
   );
 
   Map<String, dynamic> toMap() => {

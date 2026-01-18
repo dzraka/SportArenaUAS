@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 class User {
-  final int? id;
+  final int id;
   final String name;
   final String email;
   final DateTime? emailVerifiedAt;
@@ -13,7 +13,7 @@ class User {
   final String? token;
 
   User({
-    this.id,
+    required this.id,
     required this.name,
     required this.email,
     this.emailVerifiedAt,
@@ -54,22 +54,22 @@ class User {
   String toJson() => json.encode(toMap());
 
   factory User.fromMap(Map<String, dynamic> json) => User(
-    id: json["id"],
-    name: json["name"] ?? "",
-    email: json["email"] ?? "",
+    id: json["id"] ?? 0,
+    name: json["name"]?.toString() ?? "",
+    email: json["email"]?.toString() ?? "",
     emailVerifiedAt: json["email_verified_at"] != null
-        ? DateTime.parse(json["email_verified_at"])
+        ? DateTime.tryParse(json["email_verified_at"].toString())
         : null,
-    role: json["role"] ?? "",
-    phoneNumber: json["phone_number"] ?? "",
-    profilePhotoPath: json["profile_photo_path"],
+    role: json["role"]?.toString() ?? "user",
+    phoneNumber: json["phone_number"]?.toString() ?? "-",
+    profilePhotoPath: json["profile_photo_path"]?.toString(),
     createdAt: json["created_at"] != null
-        ? DateTime.parse(json["created_at"])
+        ? DateTime.tryParse(json["created_at"].toString())
         : null,
     updatedAt: json["updated_at"] != null
-        ? DateTime.parse(json["updated_at"])
+        ? DateTime.tryParse(json["updated_at"].toString())
         : null,
-    token: json["token"],
+    token: json["token"]?.toString(),
   );
 
   Map<String, dynamic> toMap() => {
