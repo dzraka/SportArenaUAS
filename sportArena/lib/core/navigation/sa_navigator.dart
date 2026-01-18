@@ -3,10 +3,9 @@ import 'package:final_project/data/server/repository/auth_repository.dart';
 import 'package:final_project/data/service/http_service.dart';
 import 'package:final_project/presentation/Setting/setting_page.dart';
 import 'package:final_project/presentation/admin/booking/admin_booking_index.dart';
-import 'package:final_project/presentation/admin/admin_home_page.dart';
+import 'package:final_project/presentation/Home/home_page.dart';
 import 'package:final_project/presentation/admin/user/user_index.dart';
 import 'package:final_project/presentation/customer/booking/customer_booking_history_page.dart';
-import 'package:final_project/presentation/customer/customer_home_page.dart';
 import 'package:flutter/material.dart';
 
 class SaNavigator extends StatefulWidget {
@@ -56,7 +55,7 @@ class _SaNavigatorState extends State<SaNavigator> {
 
             if (activeUser.role == 'admin') {
               pages = [
-                AdminHomePage(user: activeUser),
+                HomePage(user: activeUser),
                 UserIndex(user: activeUser),
                 AdminBookingIndex(),
                 SettingPage(user: activeUser),
@@ -89,7 +88,7 @@ class _SaNavigatorState extends State<SaNavigator> {
               ];
             } else {
               pages = [
-                CustomerHomePage(),
+                HomePage(user: activeUser),
                 CustomerBookingHistoryPage(),
                 SettingPage(user: activeUser),
               ];

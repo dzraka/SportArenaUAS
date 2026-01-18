@@ -5,22 +5,26 @@ import 'package:final_project/data/service/http_service.dart';
 import 'package:final_project/presentation/Setting/profile_page.dart';
 import 'package:final_project/presentation/admin/field/create_field_page.dart';
 import 'package:final_project/presentation/admin/field/edit_field_page.dart';
+import 'package:final_project/presentation/customer/booking/booking_detail.dart';
 import 'package:flutter/material.dart';
 
-class AdminHomePage extends StatefulWidget {
+class HomePage extends StatefulWidget {
   final User user;
-  const AdminHomePage({super.key, required this.user});
+  const HomePage({super.key, required this.user});
 
   @override
-  State<AdminHomePage> createState() => _AdminHomePageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _AdminHomePageState extends State<AdminHomePage> {
+class _HomePageState extends State<HomePage> {
   late FieldRepository _fieldRepository;
   List<Field> _allFields = [];
   List<Field> _filteredFields = [];
+
   bool _isLoading = true;
   String? _errorMessage;
+
+  bool get _isAdmin => widget.user.role == 'admin';
 
   @override
   void initState() {
@@ -76,18 +80,22 @@ class _AdminHomePageState extends State<AdminHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          await Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const CreateFieldPage()),
-          );
-          _loadFields();
-        },
-        tooltip: 'Add new field',
-        shape: CircleBorder(),
-        child: Icon(Icons.add),
-      ),
+      floatingActionButton: _isAdmin
+          ? FloatingActionButton(
+              onPressed: () async {
+                await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const CreateFieldPage(),
+                  ),
+                );
+                _loadFields();
+              },
+              tooltip: 'Add new field',
+              shape: CircleBorder(),
+              child: Icon(Icons.add),
+            )
+          : null,
 
       body: SafeArea(
         child: RefreshIndicator(
@@ -241,13 +249,23 @@ class _AdminHomePageState extends State<AdminHomePage> {
                       child: InkWell(
                         borderRadius: BorderRadius.circular(16),
                         onTap: () async {
-                          await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => EditFieldPage(field: field),
-                            ),
-                          );
-                          _loadFields();
+                          if (_isAdmin) {
+                            await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    EditFieldPage(field: field),
+                              ),
+                            );
+                            _loadFields();
+                          } else {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => BookingDetail(),
+                              ),
+                            );
+                          }
                         },
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -300,7 +318,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                                         ),
                                         const SizedBox(height: 4),
                                         Text(
-                                          field.category,
+                                          field.category.toUpperCase(),
                                           style: TextStyle(
                                             color: Colors.grey.shade600,
                                             fontSize: 12,
