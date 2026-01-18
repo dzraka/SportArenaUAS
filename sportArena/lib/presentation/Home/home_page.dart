@@ -106,67 +106,7 @@ class _HomePageState extends State<HomePage> {
             padding: const EdgeInsets.all(24.0),
             physics: const AlwaysScrollableScrollPhysics(),
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Welcome',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-
-                      Text(
-                        widget.user.name,
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w300,
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  InkWell(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ProfilePage(user: widget.user),
-                        ),
-                      );
-                    },
-                    borderRadius: BorderRadius.circular(50),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.15),
-                            blurRadius: 8,
-                            offset: Offset(0, 4),
-                          ),
-                        ],
-                      ),
-                      child: CircleAvatar(
-                        backgroundColor: Colors.blue[100],
-                        radius: 25,
-                        child: Text(
-                          widget.user.name[0].toUpperCase(),
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                            color: Colors.blue[900],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+              _header(),
 
               const SizedBox(height: 24),
 
@@ -269,6 +209,64 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _header() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Selamat datang',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+
+            Text(
+              widget.user.name,
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300),
+            ),
+          ],
+        ),
+
+        InkWell(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ProfilePage(user: widget.user),
+              ),
+            );
+          },
+          borderRadius: BorderRadius.circular(50),
+          child: Container(
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.15),
+                  blurRadius: 8,
+                  offset: Offset(0, 4),
+                ),
+              ],
+            ),
+            child: CircleAvatar(
+              backgroundColor: Colors.blue[100],
+              radius: 25,
+              child: Text(
+                widget.user.name[0].toUpperCase(),
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                  color: Colors.blue[900],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
