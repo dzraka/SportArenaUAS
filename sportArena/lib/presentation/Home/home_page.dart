@@ -6,6 +6,7 @@ import 'package:final_project/presentation/Setting/profile_page.dart';
 import 'package:final_project/presentation/admin/field/create_field_page.dart';
 import 'package:final_project/presentation/admin/field/edit_field_page.dart';
 import 'package:final_project/presentation/customer/booking/booking_detail.dart';
+import 'package:final_project/presentation/customer/booking/form_booking.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -262,7 +263,7 @@ class _HomePageState extends State<HomePage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => BookingDetail(),
+                                builder: (context) => FormBooking(),
                               ),
                             );
                           }
