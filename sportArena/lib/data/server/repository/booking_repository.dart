@@ -114,7 +114,7 @@ class BookingRepository {
     }
   }
 
-  Future<bool> updadteBookingStatus(int bookingId, String status) async {
+  Future<bool> updateBookingStatus(int bookingId, String status) async {
     final token = await _getToken();
 
     try {

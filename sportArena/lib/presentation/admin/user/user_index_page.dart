@@ -62,9 +62,20 @@ class _UserIndexPageState extends State<UserIndexPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'Daftar Customer',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Daftar Customer',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+
+                  IconButton(
+                    onPressed: _loadUserData,
+                    icon: const Icon(Icons.refresh),
+                    tooltip: 'Refresh',
+                  ),
+                ],
               ),
 
               SizedBox(height: 24),
@@ -74,24 +85,21 @@ class _UserIndexPageState extends State<UserIndexPage> {
                     ? LoadingIndicator()
                     : _userList.isEmpty
                     ? const Center(child: Text('Tidak ada data customer'))
-                    : RefreshIndicator(
-                        onRefresh: _loadUserData,
-                        child: ListView.builder(
-                          itemCount: _userList.length,
-                          itemBuilder: (context, index) {
-                            final customer = _userList[index];
-                            return Card(
-                              margin: const EdgeInsets.only(bottom: 16),
-                              child: ListTile(
-                                leading: CircleAvatar(
-                                  child: Text(customer.name[0].toUpperCase()),
-                                ),
-                                title: Text(customer.name),
-                                subtitle: Text(customer.email),
+                    : ListView.builder(
+                        itemCount: _userList.length,
+                        itemBuilder: (context, index) {
+                          final customer = _userList[index];
+                          return Card(
+                            margin: const EdgeInsets.only(bottom: 16),
+                            child: ListTile(
+                              leading: CircleAvatar(
+                                child: Text(customer.name[0].toUpperCase()),
                               ),
-                            );
-                          },
-                        ),
+                              title: Text(customer.name),
+                              subtitle: Text(customer.email),
+                            ),
+                          );
+                        },
                       ),
               ),
             ],
