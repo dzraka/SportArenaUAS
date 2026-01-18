@@ -3,15 +3,8 @@ import 'package:final_project/data/server/model/booking.dart';
 
 class BookingCard extends StatelessWidget {
   final Booking booking;
-  final VoidCallback? onApprove;
-  final VoidCallback? onReject;
 
-  const BookingCard({
-    super.key,
-    required this.booking,
-    this.onApprove,
-    this.onReject,
-  });
+  const BookingCard({super.key, required this.booking});
 
   Color _getStatusColor(String status) {
     switch (status.toLowerCase()) {
