@@ -53,34 +53,6 @@ class _AdminBookingIndexPageState extends State<AdminBookingIndexPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (_isLoading) {
-      return const Center(child: CircularProgressIndicator());
-    }
-
-    if (_errorMessage != null) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.error_outline, color: Colors.red, size: 48),
-            const SizedBox(height: 8),
-            Text(
-              'Terjadi Kesalahan:\n$_errorMessage',
-              textAlign: TextAlign.center,
-            ),
-            ElevatedButton(
-              onPressed: _loadBookingData,
-              child: const Text('Coba Lagi'),
-            ),
-          ],
-        ),
-      );
-    }
-
-    if (_bookingList.isEmpty) {
-      return const Center(child: Text('Belum ada data booking.'));
-    }
-
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -98,7 +70,7 @@ class _AdminBookingIndexPageState extends State<AdminBookingIndexPage> {
                   IconButton(
                     onPressed: _loadBookingData,
                     icon: const Icon(Icons.refresh),
-                    tooltip: 'Refresh Data',
+                    tooltip: 'Refresh',
                   ),
                 ],
               ),

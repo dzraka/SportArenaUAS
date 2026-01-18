@@ -89,7 +89,7 @@ class _SaNavigatorState extends State<SaNavigator> {
             } else {
               pages = [
                 HomePage(user: activeUser),
-                BookingHistoryPage(),
+                BookingHistoryPage(user: activeUser),
                 SettingPage(user: activeUser),
               ];
 
