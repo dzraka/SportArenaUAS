@@ -7,6 +7,7 @@ import 'package:final_project/presentation/admin/field/create_field_page.dart';
 import 'package:final_project/presentation/admin/field/edit_field_page.dart';
 import 'package:final_project/presentation/customer/booking/booking_detail_page.dart';
 import 'package:final_project/presentation/customer/booking/booking_form_page.dart';
+import 'package:final_project/presentation/widgets/field_card.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -241,107 +242,26 @@ class _HomePageState extends State<HomePage> {
                   itemCount: _filteredFields.length,
                   itemBuilder: (context, index) {
                     final field = _filteredFields[index];
-                    return Card(
-                      margin: const EdgeInsets.only(bottom: 16.0),
-                      elevation: 2,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadiusGeometry.circular(16),
-                      ),
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(16),
-                        onTap: () async {
-                          if (_isAdmin) {
-                            await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    EditFieldPage(field: field),
-                              ),
-                            );
-                            _loadFields();
-                          } else {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => BookingFormPage(),
-                              ),
-                            );
-                          }
-                        },
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              height: 140,
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                color: Colors.grey[300],
-                                borderRadius: BorderRadius.vertical(
-                                  top: Radius.circular(16),
-                                ),
-                                image: (field.imageUrl != null)
-                                    ? DecorationImage(
-                                        image: NetworkImage(field.imageUrl!),
-                                        fit: BoxFit.cover,
-                                      )
-                                    : null,
-                              ),
-                              child: field.imageUrl == null
-                                  ? const Center(
-                                      child: Icon(
-                                        Icons.image,
-                                        size: 50,
-                                        color: Colors.grey,
-                                      ),
-                                    )
-                                  : null,
+                    return FieldCard(
+                      field: field,
+                      onTap: () async {
+                        if (_isAdmin) {
+                          await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => EditFieldPage(field: field),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          field.name,
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16,
-                                          ),
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                        const SizedBox(height: 4),
-                                        Text(
-                                          field.category.toUpperCase(),
-                                          style: TextStyle(
-                                            color: Colors.grey.shade600,
-                                            fontSize: 12,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Text(
-                                    "Rp ${field.price}",
-                                    style: TextStyle(
-                                      color: Colors.blue.shade800,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14,
-                                    ),
-                                  ),
-                                ],
-                              ),
+                          );
+                          _loadFields();
+                        } else {
+                          await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => BookingFormPage(),
                             ),
-                          ],
-                        ),
-                      ),
+                          );
+                        }
+                      },
                     );
                   },
                 ),
