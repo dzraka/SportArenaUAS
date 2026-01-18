@@ -5,7 +5,6 @@ import 'package:final_project/data/service/http_service.dart';
 import 'package:final_project/presentation/Setting/profile_page.dart';
 import 'package:final_project/presentation/admin/field/create_field_page.dart';
 import 'package:final_project/presentation/admin/field/edit_field_page.dart';
-import 'package:final_project/presentation/customer/booking/booking_detail_page.dart';
 import 'package:final_project/presentation/customer/booking/booking_form_page.dart';
 import 'package:final_project/presentation/widgets/field_card.dart';
 import 'package:flutter/material.dart';

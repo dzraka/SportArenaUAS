@@ -44,7 +44,7 @@ class _SaNavigatorState extends State<SaNavigator> {
           }
 
           if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
+            return Center(child: Text('Terjadi kesalahan: ${snapshot.error}'));
           }
 
           if (snapshot.hasData && snapshot.data != null) {
@@ -65,25 +65,25 @@ class _SaNavigatorState extends State<SaNavigator> {
                 BottomNavigationBarItem(
                   icon: Icon(Icons.home_outlined),
                   activeIcon: Icon(Icons.home),
-                  label: 'Home',
+                  label: 'Beranda',
                 ),
 
                 BottomNavigationBarItem(
                   icon: Icon(Icons.people_outline),
                   activeIcon: Icon(Icons.people),
-                  label: 'User',
+                  label: 'Pengguna',
                 ),
 
                 BottomNavigationBarItem(
                   icon: Icon(Icons.receipt_outlined),
                   activeIcon: Icon(Icons.receipt),
-                  label: 'Booking',
+                  label: 'Pemesanan',
                 ),
 
                 BottomNavigationBarItem(
                   icon: Icon(Icons.settings_outlined),
                   activeIcon: Icon(Icons.settings),
-                  label: 'Setting',
+                  label: 'Pengaturan',
                 ),
               ];
             } else {
@@ -97,19 +97,19 @@ class _SaNavigatorState extends State<SaNavigator> {
                 BottomNavigationBarItem(
                   icon: Icon(Icons.home_outlined),
                   activeIcon: Icon(Icons.home),
-                  label: 'Home',
+                  label: 'Beranda',
                 ),
 
                 BottomNavigationBarItem(
                   icon: Icon(Icons.receipt_outlined),
                   activeIcon: Icon(Icons.receipt),
-                  label: 'History',
+                  label: 'Riwayat',
                 ),
 
                 BottomNavigationBarItem(
                   icon: Icon(Icons.settings_outlined),
                   activeIcon: Icon(Icons.settings),
-                  label: 'Setting',
+                  label: 'Pengaturan',
                 ),
               ];
             }
@@ -128,7 +128,7 @@ class _SaNavigatorState extends State<SaNavigator> {
               ),
             );
           }
-          return const Center(child: Text('Failed to load'));
+          return const Center(child: Text('Gagal memuat'));
         },
       ),
     );
