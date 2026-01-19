@@ -1,7 +1,7 @@
 import 'package:final_project/data/server/model/field.dart';
 import 'package:final_project/data/server/repository/booking_repository.dart';
-import 'package:final_project/data/server/usecase/request/add_booking_request.dart';
 import 'package:final_project/data/service/http_service.dart';
+import 'package:final_project/presentation/customer/payment/payment_page.dart';
 import 'package:final_project/presentation/widgets/currency_text.dart';
 import 'package:final_project/presentation/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
@@ -17,8 +17,6 @@ class BookingFormPage extends StatefulWidget {
 }
 
 class _FormBookingState extends State<BookingFormPage> {
-  late BookingRepository _bookingRepository;
-
   DateTime? _selectedDate;
   final List<String> _selectedSlots = [];
   List<String> _bookedSlots = [];
@@ -109,61 +107,34 @@ class _FormBookingState extends State<BookingFormPage> {
     return (_selectedSlots.length * widget.field.price).round();
   }
 
-  Future<void> _submit() async {
+  void _submit() {
     if (_selectedDate == null || _selectedSlots.isEmpty) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Mohon pilih tanggal dan jam!')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Mohon pilih tanggal dan jam!')),
+      );
       return;
     }
 
-    setState(() {
-      _isLoading = true;
-    });
+    String firstSlot = _selectedSlots.first;
+    String lastSlot = _selectedSlots.last;
 
-    try {
-      final httpService = HttpService();
-      _bookingRepository = BookingRepository(httpService);
+    String startTimeStr = firstSlot.split('-')[0].replaceAll('.', ':');
+    String endTimeStr = lastSlot.split('-')[1].replaceAll('.', ':');
 
-      String firstSlot = _selectedSlots.first;
-      String lastSlot = _selectedSlots.last;
-      String startTimeStr = firstSlot.split('-')[0].replaceAll('.', ':');
-      String endTimeStr = lastSlot.split('-')[1].replaceAll('.', ':');
-
-      final request = AddBookingRequest(
-        fieldId: widget.field.id,
-        bookingDate: _selectedDate!,
-        startTime: startTimeStr,
-        endTime: endTimeStr,
-        totalPrice: _totalPrice(),
-      );
-
-      await _bookingRepository.createBooking(request);
-
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Booking berhasil dibuat'),
-            backgroundColor: Colors.green,
-          ),
-        );
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Error: ${e.toString()}'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
-    }
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PaymentPage(
+          fieldId: widget.field.id,
+          fieldName: widget.field.name,
+          selectedDate: _selectedDate!,
+          startTime: startTimeStr,
+          endTime: endTimeStr,
+          totalPrice: _totalPrice(),
+          firstSlotStr: firstSlot,
+        ),
+      ),
+    );
   }
 
   @override
@@ -276,24 +247,35 @@ class _FormBookingState extends State<BookingFormPage> {
       itemCount: _timeSlots.length,
       itemBuilder: (context, index) {
         final slot = _timeSlots[index];
+        int slotStartHour = int.parse(slot.split('.')[0]);
+
+        final now = DateTime.now();
+        bool isToday =
+            _selectedDate != null &&
+            _selectedDate!.year == now.year &&
+            _selectedDate!.month == now.month &&
+            _selectedDate!.day == now.day;
+        bool isPastTime = isToday && now.hour >= slotStartHour;
+
         final isBooked = _bookedSlots.contains(slot);
         final isSelected = _selectedSlots.contains(slot);
+        final isUnavailable = isBooked || isPastTime;
 
         return Material(
           color: Colors.transparent,
           child: InkWell(
-            onTap: isBooked ? null : () => _onSlotTap(slot),
-            borderRadius: BorderRadius.circular(8),
+            onTap: isUnavailable ? null : () => _onSlotTap(slot),
+            borderRadius: BorderRadius.circular(16),
             child: Container(
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                color: isBooked
+                color: isUnavailable
                     ? Colors.grey[300]
                     : isSelected
                     ? Colors.blue
                     : Colors.white,
                 border: Border.all(
-                  color: isBooked
+                  color: isUnavailable
                       ? Colors.grey.shade300
                       : (isSelected ? Colors.blue : Colors.grey.shade400),
                 ),
@@ -302,7 +284,7 @@ class _FormBookingState extends State<BookingFormPage> {
               child: Text(
                 slot,
                 style: TextStyle(
-                  color: isBooked
+                  color: isUnavailable
                       ? Colors.grey
                       : isSelected
                       ? Colors.white

@@ -6,6 +6,7 @@ class AddBookingRequest {
   final String startTime;
   final String endTime;
   final int totalPrice;
+  final String status;
 
   AddBookingRequest({
     required this.fieldId,
@@ -13,6 +14,7 @@ class AddBookingRequest {
     required this.startTime,
     required this.endTime,
     required this.totalPrice,
+    this.status = 'confirmed',
   });
 
   AddBookingRequest copyWith({
@@ -21,12 +23,14 @@ class AddBookingRequest {
     String? startTime,
     String? endTime,
     int? totalPrice,
+    String? status,
   }) => AddBookingRequest(
     fieldId: fieldId ?? this.fieldId,
     bookingDate: bookingDate ?? this.bookingDate,
     startTime: startTime ?? this.startTime,
     endTime: endTime ?? this.endTime,
     totalPrice: totalPrice ?? this.totalPrice,
+    status: status ?? this.status,
   );
 
   factory AddBookingRequest.fromJson(String str) =>
@@ -40,7 +44,8 @@ class AddBookingRequest {
         bookingDate: DateTime.parse(json["booking_date"]),
         startTime: json["start_time"],
         endTime: json["end_time"],
-        totalPrice: json["total_Price"],
+        totalPrice: json["total_price"],
+        status: json['status'] ?? 'confirmed',
       );
 
   Map<String, dynamic> toMap() => {
@@ -50,5 +55,6 @@ class AddBookingRequest {
     "start_time": startTime,
     "end_time": endTime,
     "total_price": totalPrice,
+    "status": status,
   };
 }

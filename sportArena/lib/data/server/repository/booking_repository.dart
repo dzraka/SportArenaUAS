@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:final_project/data/server/usecase/request/add_booking_request.dart';
 import 'package:final_project/data/server/usecase/response/get_all_booking_response.dart';
 import 'package:final_project/data/server/usecase/response/get_booking_response.dart';
@@ -40,15 +42,21 @@ class BookingRepository {
         headers: {'Authorization': 'Bearer $token'},
       );
 
-      final responseData = GetBookingResponse.fromJson(response.body);
+      print(response.statusCode);
+      print(response.body);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
+        final responseData = GetBookingResponse.fromJson(response.body);
         return responseData;
       } else {
-        return responseData;
+        final errorBody = jsonDecode(response.body);
+        String errorMessage =
+            errorBody['message'] ?? 'Terjadi kesalahan pada server';
+        throw Exception(errorMessage);
       }
     } catch (e) {
-      throw Exception('Booking Failed: $e');
+      print(e);
+      rethrow;
     }
   }
 

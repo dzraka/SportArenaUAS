@@ -5,7 +5,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 class HttpService {
-  final String baseURL = 'http://192.168.1.8:8000/api/';
+  final String baseURL = 'http://10.0.2.2:8000/api/';
 
   String? _token;
 
