@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:final_project/data/server/model/user.dart';
 import 'package:final_project/data/server/repository/auth_repository.dart';
 import 'package:final_project/data/service/http_service.dart';
@@ -34,6 +36,9 @@ class _UserIndexPageState extends State<UserIndexPage> {
 
     try {
       final response = await _authRepository.getAllUser();
+      for (var e in response.data) {
+        print("${e.profilePhotoPath}");
+      }
 
       if (mounted) {
         setState(() {
@@ -92,8 +97,53 @@ class _UserIndexPageState extends State<UserIndexPage> {
                           return Card(
                             margin: const EdgeInsets.only(bottom: 16),
                             child: ListTile(
-                              leading: CircleAvatar(
-                                child: Text(customer.name[0].toUpperCase()),
+                              leading: Builder(
+                                builder: (context) {
+                                  if (customer.profilePhotoPath == null) {
+                                    return CircleAvatar(
+                                      backgroundColor: Colors.blue[100],
+                                      radius: 25,
+                                      child: Text(
+                                        customer.name[0].toUpperCase(),
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20,
+                                          color: Colors.blue[900],
+                                        ),
+                                      ),
+                                    );
+                                  } else {
+                                    return SizedBox(
+                                      width: 54,
+                                      height: 54,
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(25),
+                                        child: Image.network(
+                                          'http://10.0.2.2:8000/storage/users/${customer.profilePhotoPath!.split('/')[1]}',
+                                          fit: BoxFit.cover,
+                                          loadingBuilder:
+                                              (
+                                                context,
+                                                child,
+                                                loadingProgress,
+                                              ) {
+                                                if (loadingProgress == null)
+                                                  return child;
+                                                return const Center(
+                                                  child:
+                                                      CircularProgressIndicator(),
+                                                );
+                                              },
+                                          errorBuilder:
+                                              (context, error, stackTrace) {
+                                                print("$error");
+                                                return Text("$error");
+                                              },
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                },
                               ),
                               title: Text(customer.name),
                               subtitle: Text(customer.email),
