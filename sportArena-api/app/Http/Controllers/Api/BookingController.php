@@ -18,6 +18,23 @@ class BookingController extends Controller
         $this->bookingService = $bookingService;
     }
 
+    private function autoUpdateStatus()
+    {
+        $now = now();
+        $currentDate = $now->format('Y-m-d');
+        $currentTime = $now->format('H:i');
+
+        Booking::where('status', 'confirmed')
+            ->where(function ($query) use ($currentDate, $currentTime) {
+                $query->where('booking_date', '<', $currentDate)
+                      ->orWhere(function ($q) use ($currentDate, $currentTime) {
+                          $q->where('booking_date', $currentDate)
+                            ->where('end_time', '<=', $currentTime);
+                      });
+            })
+            ->update(['status' => 'complete']);
+    }
+
     /**
      * Get all bookings
      * 
@@ -25,6 +42,8 @@ class BookingController extends Controller
      */
     public function index()
     {
+        $this->autoUpdateStatus();
+
         $bookings = $this->bookingService->getAllBookings();
 
         return response()->json([
@@ -41,6 +60,8 @@ class BookingController extends Controller
      */
     public function checkSlots(Request $request)
     {
+        $this->autoUpdateStatus();
+
         $request->validate([
             'field_id' => 'required',
             'booking_date' => 'required|date',
@@ -144,6 +165,8 @@ class BookingController extends Controller
     public function show($id)
     {
         try {
+            $this->autoUpdateStatus();
+
             $booking = $this->bookingService->getBookingById($id);
 
             return response()->json([
@@ -167,6 +190,8 @@ class BookingController extends Controller
      */
     public function userBookings(Request $request)
     {
+        $this->autoUpdateStatus();
+
         $bookings = $this->bookingService->getUserBookings($request->user());
 
         return response()->json([
