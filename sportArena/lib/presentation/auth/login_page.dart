@@ -208,7 +208,7 @@ class _LoginPageState extends State<LoginPage> {
                 PrimaryButton(
                   text: 'Masuk',
                   isLoading: _isLoading,
-                  onPressed: _login,
+                  onPressed: () async => await _login(),
                 ),
               ],
             ),

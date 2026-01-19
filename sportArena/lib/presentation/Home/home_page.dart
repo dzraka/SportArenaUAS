@@ -1,5 +1,6 @@
 import 'package:final_project/data/server/model/field.dart';
 import 'package:final_project/data/server/model/user.dart';
+import 'package:final_project/data/server/repository/auth_repository.dart';
 import 'package:final_project/data/server/repository/field_repository.dart';
 import 'package:final_project/data/service/http_service.dart';
 import 'package:final_project/presentation/Setting/profile_page.dart';
@@ -19,8 +20,12 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late FieldRepository _fieldRepository;
+  late AuthRepository _authRepository;
+
   List<Field> _allFields = [];
   List<Field> _filteredFields = [];
+
+  late User _currentUser;
 
   bool _isLoading = true;
   String? _errorMessage;
@@ -32,10 +37,14 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     final httpService = HttpService();
     _fieldRepository = FieldRepository(httpService);
+    _authRepository = AuthRepository(httpService);
+    _currentUser = widget.user;
     _loadFields();
+    _refreshUserData();
   }
 
   Future<void> _loadFields() async {
+    print("called");
     setState(() {
       _isLoading = true;
       _errorMessage = null;
@@ -57,6 +66,19 @@ class _HomePageState extends State<HomePage> {
           _isLoading = false;
         });
       }
+    }
+  }
+
+  Future<void> _refreshUserData() async {
+    try {
+      final response = await _authRepository.getUserProfile();
+      if (mounted) {
+        setState(() {
+          _currentUser = response.data;
+        });
+      }
+    } catch (e) {
+      print('Gagal refresh user: $e');
     }
   }
 
@@ -100,23 +122,21 @@ class _HomePageState extends State<HomePage> {
 
       body: SafeArea(
         child: RefreshIndicator(
-          onRefresh: _loadFields,
+          onRefresh: () async {
+            await Future.wait([_loadFields(), _refreshUserData()]);
+          },
           child: ListView(
             padding: const EdgeInsets.all(24.0),
             physics: const AlwaysScrollableScrollPhysics(),
             children: [
               _header(),
-
               const SizedBox(height: 24),
-
               SearchBar(
                 hintText: 'Search fields',
                 leading: Icon(Icons.search),
                 onChanged: (value) => _searchFields(value),
               ),
-
               const SizedBox(height: 24),
-
               if (_isLoading)
                 const Center(
                   child: Padding(
@@ -175,34 +195,49 @@ class _HomePageState extends State<HomePage> {
                   ),
                 )
               else
-                ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: _filteredFields.length,
-                  itemBuilder: (context, index) {
-                    final field = _filteredFields[index];
-                    return FieldCard(
-                      field: field,
-                      onTap: () async {
-                        if (_isAdmin) {
-                          await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => EditFieldPage(field: field),
-                            ),
+                FutureBuilder(
+                  future: Future.delayed(Duration(seconds: 0), () {}),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: Padding(
+                          padding: EdgeInsets.only(top: 100),
+                          child: CircularProgressIndicator(),
+                        ),
+                      );
+                    } else {
+                      return ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: _filteredFields.length,
+                        itemBuilder: (context, index) {
+                          final field = _filteredFields[index];
+                          return FieldCard(
+                            field: field,
+                            onTap: () async {
+                              if (_isAdmin) {
+                                await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        EditFieldPage(field: field),
+                                  ),
+                                );
+                                _loadFields();
+                              } else {
+                                await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        BookingFormPage(field: field),
+                                  ),
+                                );
+                              }
+                            },
                           );
-                          _loadFields();
-                        } else {
-                          await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  BookingFormPage(field: field),
-                            ),
-                          );
-                        }
-                      },
-                    );
+                        },
+                      );
+                    }
                   },
                 ),
             ],
@@ -225,20 +260,24 @@ class _HomePageState extends State<HomePage> {
             ),
 
             Text(
-              widget.user.name,
+              _currentUser.name,
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300),
             ),
           ],
         ),
 
         InkWell(
-          onTap: () {
-            Navigator.push(
+          onTap: () async {
+            await Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => ProfilePage(user: widget.user),
+                builder: (context) {
+                  return ProfilePage(user: _currentUser);
+                },
               ),
             );
+            _loadFields();
+            _refreshUserData();
           },
           borderRadius: BorderRadius.circular(50),
           child: Container(
@@ -252,17 +291,45 @@ class _HomePageState extends State<HomePage> {
                 ),
               ],
             ),
-            child: CircleAvatar(
-              backgroundColor: Colors.blue[100],
-              radius: 25,
-              child: Text(
-                widget.user.name[0].toUpperCase(),
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                  color: Colors.blue[900],
-                ),
-              ),
+            child: Builder(
+              builder: (context) {
+                if (_currentUser.profilePhotoPath == null) {
+                  return CircleAvatar(
+                    backgroundColor: Colors.blue[100],
+                    radius: 25,
+                    child: Text(
+                      _currentUser.name[0].toUpperCase(),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                        color: Colors.blue[900],
+                      ),
+                    ),
+                  );
+                } else {
+                  return SizedBox(
+                    width: 54,
+                    height: 54,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(25),
+                      child: Image.network(
+                        'http://10.0.2.2:8000/storage/users/${_currentUser.profilePhotoPath!.split('/')[1]}',
+                        fit: BoxFit.cover,
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        },
+                        errorBuilder: (context, error, stackTrace) {
+                          print("$error");
+                          return Text("$error");
+                        },
+                      ),
+                    ),
+                  );
+                }
+              },
             ),
           ),
         ),
