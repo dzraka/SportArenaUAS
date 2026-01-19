@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:final_project/data/server/usecase/request/login_request.dart';
 import 'package:final_project/data/server/usecase/request/register_request.dart';
@@ -7,6 +8,7 @@ import 'package:final_project/data/server/usecase/response/get_user_response.dar
 import 'package:final_project/data/server/usecase/response/login_response.dart';
 import 'package:final_project/data/server/usecase/response/register_response.dart';
 import 'package:final_project/data/service/http_service.dart';
+import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthRepository {
@@ -115,15 +117,26 @@ class AuthRepository {
     }
   }
 
-  Future<bool> updateProfile(Map<String, dynamic> data) async {
+  Future<bool> updateProfile(Map<String, String> data, File? imageFile) async {
     final token = await _getToken();
 
     try {
-      final response = await httpService.post(
-        'profile',
-        data,
-        headers: {'Authorization': 'Bearer $token'},
-      );
+      http.Response response;
+      if (imageFile != null) {
+        response = await httpService.postWithFile(
+          'profile',
+          data,
+          imageFile,
+          'image',
+          headers: {'Authorization': 'Bearer $token'},
+        );
+      } else {
+        response = await httpService.post(
+          'profile',
+          data,
+          headers: {'Authorization': 'Bearer $token'},
+        );
+      }
 
       return response.statusCode == 200;
     } catch (e) {
