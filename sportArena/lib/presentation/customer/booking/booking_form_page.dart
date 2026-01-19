@@ -131,7 +131,6 @@ class _FormBookingState extends State<BookingFormPage> {
           startTime: startTimeStr,
           endTime: endTimeStr,
           totalPrice: _totalPrice(),
-          firstSlotStr: firstSlot,
         ),
       ),
     );
