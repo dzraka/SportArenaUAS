@@ -17,7 +17,8 @@ class StoreBookingRequest extends FormRequest
             'field_id' => 'required|exists:fields,id',
             'booking_date' => 'required|date|after_or_equal:today',
             'start_time' => 'required|date_format:H:i',
-            'end_time' => 'required|date_format:H:i|after:start_time'
+            'end_time' => 'required|date_format:H:i|after:start_time',
+            'status' => 'nullable|string',        
         ];
     }
 

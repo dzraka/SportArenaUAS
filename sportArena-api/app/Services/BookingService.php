@@ -73,7 +73,7 @@ class BookingService
                 'start_time' => $data['start_time'],
                 'end_time' => $data['end_time'],
                 'total_price' => $totalPrice,
-                'status' => 'pending',
+                'status' => $data['status'] ?? 'pending',
             ]);
         });
     }
