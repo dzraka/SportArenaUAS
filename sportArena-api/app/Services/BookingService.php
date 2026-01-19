@@ -14,8 +14,8 @@ class BookingService
     public function getAllBookings()
     {
         return Booking::with(['user', 'field'])
-            ->orderBy('booking_date', 'desc')
-            ->orderBy('start_time', 'desc')
+            ->orderBy('booking_date', 'asc')
+            ->orderBy('start_time', 'asc')
             ->get();
     }
 
@@ -23,7 +23,8 @@ class BookingService
     {
         return Booking::with(['field'])
             ->where('user_id', $user->id)
-            ->orderBy('booking_date', 'desc')
+            ->orderBy('booking_date', 'asc')
+            ->orderBy('start_time', 'asc')
             ->get();
     }
 
