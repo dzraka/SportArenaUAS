@@ -30,18 +30,24 @@ class FieldCard extends StatelessWidget {
                 borderRadius: const BorderRadius.vertical(
                   top: Radius.circular(16),
                 ),
-                image: hasImage
-                    ? DecorationImage(
-                        image: NetworkImage(field.imageUrl!),
-                        fit: BoxFit.cover,
-                      )
-                    : null,
               ),
-              child: !hasImage
-                  ? const Center(
-                      child: Icon(Icons.image, size: 50, color: Colors.grey),
-                    )
-                  : null,
+              child: Builder(
+                builder: (context) {
+                  // print("[image field] $imageUrl");
+                  if (hasImage) {
+                    return Image.network(
+                      imageUrl,
+                      fit: BoxFit.cover,
+                      headers: {'Connection': 'close'},
+                      errorBuilder: (context, error, stackTrace) {
+                        return Text("$error");
+                      },
+                    );
+                  } else {
+                    return Center(child: Icon(Icons.image));
+                  }
+                },
+              ),
             ),
             Padding(
               padding: const EdgeInsets.all(16.0),
