@@ -196,7 +196,8 @@ class _HomePageState extends State<HomePage> {
                           await Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => BookingFormPage(),
+                              builder: (context) =>
+                                  BookingFormPage(field: field),
                             ),
                           );
                         }

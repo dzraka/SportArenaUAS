@@ -138,4 +138,30 @@ class BookingRepository {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('auth_token');
   }
+
+  Future<GetAllBookingResponse> getBookingsByDate(
+    int fieldId,
+    String date,
+  ) async {
+    final token = await _getToken();
+
+    try {
+      final String url = 'bookings?field_id=$fieldId&booking_date=$date';
+
+      final response = await httpService.get(
+        url,
+        headers: {'Authorization': 'Bearer $token'},
+      );
+
+      final responseData = GetAllBookingResponse.fromJson(response.body);
+
+      if (response.statusCode == 200) {
+        return responseData;
+      } else {
+        return responseData;
+      }
+    } catch (e) {
+      throw Exception('Error fetching booked slots: $e');
+    }
+  }
 }

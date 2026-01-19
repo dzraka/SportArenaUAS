@@ -5,12 +5,14 @@ class AddBookingRequest {
   final DateTime bookingDate;
   final String startTime;
   final String endTime;
+  final int totalPrice;
 
   AddBookingRequest({
     required this.fieldId,
     required this.bookingDate,
     required this.startTime,
     required this.endTime,
+    required this.totalPrice,
   });
 
   AddBookingRequest copyWith({
@@ -18,11 +20,13 @@ class AddBookingRequest {
     DateTime? bookingDate,
     String? startTime,
     String? endTime,
+    int? totalPrice,
   }) => AddBookingRequest(
     fieldId: fieldId ?? this.fieldId,
     bookingDate: bookingDate ?? this.bookingDate,
     startTime: startTime ?? this.startTime,
     endTime: endTime ?? this.endTime,
+    totalPrice: totalPrice ?? this.totalPrice,
   );
 
   factory AddBookingRequest.fromJson(String str) =>
@@ -36,6 +40,7 @@ class AddBookingRequest {
         bookingDate: DateTime.parse(json["booking_date"]),
         startTime: json["start_time"],
         endTime: json["end_time"],
+        totalPrice: json["total_Price"],
       );
 
   Map<String, dynamic> toMap() => {
@@ -44,5 +49,6 @@ class AddBookingRequest {
         "${bookingDate.year.toString().padLeft(4, '0')}-${bookingDate.month.toString().padLeft(2, '0')}-${bookingDate.day.toString().padLeft(2, '0')}",
     "start_time": startTime,
     "end_time": endTime,
+    "total_price": totalPrice,
   };
 }
